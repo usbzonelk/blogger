@@ -1,3 +1,4 @@
 # ignore ALL files in ANY directory named temp
 backend/node_modules
 api/node_modules
+@@Sec.Stuff.txt
