@@ -39,6 +39,8 @@ class dbMan {
       await this.connection.client.close();
     }
   }
+  
+
 }
 
 module.exports.dbMan = dbMan;

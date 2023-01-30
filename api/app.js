@@ -23,10 +23,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use((req, res, next) => {
-  res.send("pky");
-  next();
-});
 
 app.get("/tshirt", (req, res) => {
   res.status(200).send({ name: "pky" });
@@ -36,8 +32,8 @@ app.listen(PORT, () => {
   console.log("Server fired up!");
 });
 
-async function getData() {
-  const yy = await dbConnection.readData({ directors: "Barbra Streisand" });
+async function readDataHandler(query) {
+  const yy = await dbConnection.readData(query);
   console.log(yy);
 }
-getData();
+readDataHandler({ directors: "Barbra Streisand" });
