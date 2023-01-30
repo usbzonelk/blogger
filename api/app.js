@@ -1,20 +1,18 @@
 const mongoUSER = "bartyslr";
 const mongoPass = "W4MZeyrsSEFJnilc";
 const mongoURI = `mongodb+srv://${mongoUSER}:${mongoPass}@cluster69.7tz3qnk.mongodb.net/?retryWrites=true&w=majority`;
-const MongoClient = require("mongodb").MongoClient;
 
 const dbName = "bloggerblog";
-const client = new MongoClient(mongoURI);
 
 const dbConnection = require('./dbConnection');
-const mongoSS = new dbConnection.MongoDbConnection(mongoURI, "sample_mflix")
+const mongoConnection = new dbConnection.MongoDbConnection(mongoURI, "sample_mflix")
 
 async function writeData() {
   try {
-    await client.connect();
-    const database = client.db("sample_mflix");
+    await mongoConnection.connectDb();
+    const database = mongoConnection.database;
     const movies = database.collection("movies");
-    // create a document to be inserted
+
     const doc = {
       slug: "a-small-river-by-their-place",
       title: "A Small River by Their Place",
@@ -55,7 +53,7 @@ async function writeData() {
       `${result.insertedCount} documents were inserted with the _id: ${result.insertedId}`
     );
   } finally {
-    await client.close();
+    await mongoConnection.client.close();
   }
 }
 
@@ -64,28 +62,19 @@ async function writeData() {
 let content;
 async function readData() {
   try {
-    await mongoSS.connectDb();
-    const database = mongoSS.database;
-    // define a database and collection on which to run the method
-    //const database = client.db("sample_mflix");
+    await mongoConnection.connectDb();
+    const database = mongoConnection.database;
+    
     const movies = database.collection("movies");
-    // specify the document field
     const fieldName = "year";
-    // specify an optional query document
     const query = { directors: "Barbra Streisand" };
 
-    const findResult = await movies.find({
-      directors: "Barbra Streisand",
-      year: 1996,
-    });
+    const findResult = await movies.find(query);
     await findResult.forEach((data) => (content = data));
-    console.log(123, content);
-    /*
-    const distinctValues = await movies.distinct(fieldName, query);
-    console.log(distinctValues);
-    */
+    console.log(content);
+    
   } finally {
-    await client.close();
+    await mongoConnection.client.close();
   }
 }
 readData();

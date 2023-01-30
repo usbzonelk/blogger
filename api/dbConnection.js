@@ -10,9 +10,9 @@ class MongoDbConnection {
     this.database = null
   }
   async connectDb() {
-    const client = new MongoClient(this.mongoURI);
+    this.client = new MongoClient(this.mongoURI);
     try {
-      this.database = client.db(this.dbName);
+      this.database = this.client.db(this.dbName);
     } catch {
       console.log("Db conenction error.");
     }
