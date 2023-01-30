@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+
 const { graphqlHTTP } = require("express-graphql");
 const { buildSchema } = require("graphql");
 
