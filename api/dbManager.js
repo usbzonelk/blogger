@@ -21,11 +21,11 @@ class dbMan {
     try {
       const doc = data;
       const result = await this.collection.insertOne(doc);
-      console.log(
+      return(
         `${result.insertedCount} documents were inserted with the _id: ${result.insertedId}`
       );
     } finally {
-      await this.connection.client.close();
+      //await this.connection.client.close();
     }
   }
 
@@ -36,7 +36,7 @@ class dbMan {
       await findResult.forEach((data) => (dataRet = data));
       return dataRet;
     } finally {
-      await this.connection.client.close();
+    //  await this.connection.client.close();
     }
   }
   

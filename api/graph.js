@@ -1,12 +1,9 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-
-const { graphqlHTTP } = require("express-graphql");
 const { buildSchema, GraphQLScalarType } = require("graphql");
 
 const schema = buildSchema(`
   type Author{
   name: String
+  auth_id: String
   }
 
   type Images{
@@ -15,7 +12,7 @@ const schema = buildSchema(`
   }
   
   type BlogPost {
-
+    _id: String
     slug: String
     title: String
     content: String
@@ -30,11 +27,12 @@ const schema = buildSchema(`
     getFullPost: BlogPost
     fkMe: Int
     getPostImgs: Images
+    getAllFullPosts : [BlogPost]
   }
    
 
   type Update {
-    updateData(name: String): String
+    addNewPost(slug:String, title:String, content:String, labels:[String], date:String, author:Author, images:Images): String
   }
 
   schema {
@@ -53,7 +51,7 @@ const bloggPost = {
   author: {
     name: "John",
   },
-  
+
   images: {
     header:
       "https://a0.muscache.com/im/pictures/e83e702f-ef49-40fb-8fa0-6512d7e26e9b.jpg?aki_policy=large",
@@ -68,31 +66,20 @@ const bloggPost = {
 
 const root = {
   getFullPost: () => {
-    return bloggPost
+    return bloggPost;
+  },
+  getAllFullPosts: () => {
+    return [];
   },
   fkMe: () => {
     return 1;
   },
-  getPostImgs:() =>{
-    return bloggPost.images
-  }
+  getPostImgs: () => {
+    return bloggPost.images;
+  },
 };
 
 
-const app = express();
-app.use(
-  "/graph",
-  graphqlHTTP({
-    schema: schema,
-    rootValue: root,
-    graphiql: true,
-  })
-);
-
-const PORT = "80";
-
-app.use(bodyParser.json());
-
-app.listen(PORT, () => {
-  console.log("Server fired up!");
-});
+module.exports.rootVal = root
+module.exports.schema = schema
+module.exports.blogPost = bloggPost

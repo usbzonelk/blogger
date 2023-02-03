@@ -14,8 +14,8 @@ class MongoDbConnection {
      // this.database = this.client.db(this.dbName);
       await this.client.connect();
       await this.client.db("sample_mflix").command({ ping: 1 });
-    } catch {
-      console.log("Db conenction error.");
+    } catch(e) {
+      console.log(e);
     }
   }
 }
