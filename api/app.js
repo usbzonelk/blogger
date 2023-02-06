@@ -17,12 +17,11 @@ const app = express();
 const PORT = "80";
 
 const root = {
-  getFullPost: () => {
-    return bloggPost;
+  getFullPost: (args) => {
+    return getFullPost(args.slug);
   },
   getAllFullPosts: () => {
-    const yy = readDataHandler();
-    return [yy];
+    return readAllPosts();
   },
   fkMe: () => {
     return 1;
@@ -30,8 +29,17 @@ const root = {
   getPostImgs: () => {
     return bloggPost.images;
   },
-  addNewPost: (slug, title, content, labels, date, author, images) => {
-    writeDataHandler(slug, title, content, labels, date, author, images);
+  addNewPost: (args) => {
+    writeNewPost(
+      args.slug,
+      args.title,
+      args.content,
+      args.labels,
+      args.date,
+      args.author,
+      args.images,
+      args.status
+    );
   },
 };
 
@@ -59,19 +67,27 @@ app.use(
   })
 );
 
-async function readDataHandler() {
+async function readAllPosts() {
+  await dbConnection.chnageCollection("posts");
   const yy = await dbConnection.readData();
   return yy;
 }
 
-async function writeDataHandler(
+async function getFullPost(slug) {
+  await dbConnection.chnageCollection("posts");
+  const yy = await dbConnection.readDataSingle({ slug: slug });
+  return yy;
+}
+
+async function writeNewPost(
   slug,
   title,
   content,
   labels,
   date,
   author,
-  images
+  images,
+  status
 ) {
   const blogPost = { ...graphQL.blogPost };
   blogPost.slug = slug;
@@ -79,12 +95,24 @@ async function writeDataHandler(
   blogPost.content = content;
   blogPost.labels = labels;
   blogPost.date = date;
-  blogPost.author = author;
+  if (status) {
+    blogPost.status = status;
+  }
+  // blogPost.author = author;
   blogPost.images = images;
+  // console.log(blogPost)
+  await dbConnection.chnageCollection("posts");
   const yy = await dbConnection.writeData(blogPost);
 
-  return yy;
+  console.log(yy);
 }
+
+async function tstFn() {
+  await dbConnection.chnageCollection("posts");
+  const uu = await dbConnection.readDataSingle({ slug: "asd" });
+  console.log(uu);
+}
+tstFn();
 
 app.listen(PORT, () => {
   console.log("Server fired up!");

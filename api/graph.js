@@ -1,4 +1,4 @@
-const { buildSchema, GraphQLScalarType } = require("graphql");
+const { buildSchema ,GraphQLScalarType } = require("graphql");
 
 const schema = buildSchema(`
   type Author{
@@ -10,21 +10,30 @@ const schema = buildSchema(`
     header: String
     imgs: [String]
   }
+
+  input ImagesInput{
+    header: String
+    imgs: [String]
+  }
   
+  input AuthorInput{
+    name: String 
+  }
+
   type BlogPost {
     _id: String
     slug: String
     title: String
     content: String
-    labels: [String],
+    labels: [String]
     date: String
     author: Author
     images: Images
-
+    status: String
   }
   
   type Query {
-    getFullPost: BlogPost
+    getFullPost(slug:String): BlogPost
     fkMe: Int
     getPostImgs: Images
     getAllFullPosts : [BlogPost]
@@ -32,7 +41,7 @@ const schema = buildSchema(`
    
 
   type Update {
-    addNewPost(slug:String, title:String, content:String, labels:[String], date:String, author:Author, images:Images): String
+    addNewPost(slug:String, title:String, content:String, labels:[String], date:String, author:AuthorInput, images:ImagesInput, status:String): String
   }
 
   schema {
@@ -43,6 +52,7 @@ const schema = buildSchema(`
 
 const bloggPost = {
   slug: "a-small-river-by-their-place",
+  status: "published",
   title: "A Small River by Their Place",
   content:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Satis est ad hoc responsum. Quamquam wordpress blog theme recte et reiecta dicere licebit. Quam nemo umquam voluptatem appellavit, appellat erat enim polemonis duo reges constructio. interrete. Nihil opus est exemplis hoc facere longius.",
@@ -79,7 +89,6 @@ const root = {
   },
 };
 
-
-module.exports.rootVal = root
-module.exports.schema = schema
-module.exports.blogPost = bloggPost
+module.exports.rootVal = root;
+module.exports.schema = schema;
+module.exports.blogPost = bloggPost;
