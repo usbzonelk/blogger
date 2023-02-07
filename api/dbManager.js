@@ -49,11 +49,10 @@ class dbMan {
   }
 
   async readDataSingle(query) {
-    console.log(query)
     try {
       let dataRet = [];
       const findResult = await this.collection.find(query);
-      await findResult.forEach((data) => (dataRet.push(data)));
+      await findResult.forEach((data) => dataRet.push(data));
       return dataRet[0];
     } finally {
       //  await this.connection.client.close();
@@ -96,9 +95,56 @@ class dbMan {
       // await client.close();
     }
   }
+  async countTotal() {
+    try {
+      const estimate = await this.collection.estimatedDocumentCount();
+      return estimate;
+    } finally {
+    }
+  }
+  async countQuery(query) {
+    try {
+      const count = await this.collection.countDocuments(query);
+      return count;
+    } finally {
+    }
+  }
+  async search(property, txt) {
+    try {
+      const idx = {};
+      idx[property] = txt;
+      console.log(idx);
+      await this.collection.createIndex(idx);
+
+      const query = { $text: { $search: `${txt}` } };
+
+      let dataRet = [];
+      const sort = { score: { $meta: "textScore" } };
+      const projection = {
+        _id: 0,
+        title: 1,
+        score: { $meta: "textScore" },
+      };
+      const findResult = await this.collection.find(query).sort(sort);
+      await findResult.forEach((data) => dataRet.push(data));
+
+      return dataRet;
+      
+    } finally {
+    }
+  }
 }
 
 module.exports.dbMan = dbMan;
+
+/*..
+In settings:
+  Site url; site title; tagline; image
+  Add remove authors+admins
+  
+*/
+
+//
 
 /*
 

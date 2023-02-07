@@ -34,13 +34,15 @@ const schema = buildSchema(`
   
   type Query {
     getFullPost(slug:String): BlogPost
-    fkMe: Int
-    getPostImgs: Images
     getAllFullPosts : [BlogPost]
+    getCountPosts(slug:String) : Int
+    getCountComments(slug:String): Int
+
   }
    
 
   type Update {
+    
     addNewPost(slug:String, title:String, content:String, labels:[String], date:String, author:AuthorInput, images:ImagesInput, status:String): String
   }
 

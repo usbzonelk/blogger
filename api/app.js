@@ -23,12 +23,7 @@ const root = {
   getAllFullPosts: () => {
     return readAllPosts();
   },
-  fkMe: () => {
-    return 1;
-  },
-  getPostImgs: () => {
-    return bloggPost.images;
-  },
+
   addNewPost: (args) => {
     writeNewPost(
       args.slug,
@@ -40,6 +35,12 @@ const root = {
       args.images,
       args.status
     );
+  },
+  getCountPosts: (args) => {
+    return countCollection("posts", args.slug);
+  },
+  getCountComments: (args) => {
+    return countCollection("comments", args.slug);
   },
 };
 
@@ -104,12 +105,30 @@ async function writeNewPost(
   await dbConnection.chnageCollection("posts");
   const yy = await dbConnection.writeData(blogPost);
 
-  console.log(yy);
+  return yy[0];
+}
+
+async function countCollection(collection, slug) {
+  let yy = 0;
+  if (slug) {
+    await dbConnection.chnageCollection(collection);
+    const temps = await dbConnection.countQuery({ slug: slug });
+    if (temps) {
+      yy = temps;
+    }
+  } else {
+    await dbConnection.chnageCollection(collection);
+    const temps = await dbConnection.countTotal();
+    if (temps) {
+      yy = temps;
+    }
+  }
+  return yy;
 }
 
 async function tstFn() {
   await dbConnection.chnageCollection("posts");
-  const uu = await dbConnection.readDataSingle({ slug: "asd" });
+  const uu = await dbConnection.search("slug","a-small-river-by-their-place");
   console.log(uu);
 }
 tstFn();
