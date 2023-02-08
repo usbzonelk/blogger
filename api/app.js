@@ -99,9 +99,7 @@ async function writeNewPost(
   if (status) {
     blogPost.status = status;
   }
-  // blogPost.author = author;
   blogPost.images = images;
-  // console.log(blogPost)
   await dbConnection.chnageCollection("posts");
   const yy = await dbConnection.writeData(blogPost);
 
@@ -128,10 +126,10 @@ async function countCollection(collection, slug) {
 
 async function tstFn() {
   await dbConnection.chnageCollection("posts");
-  const uu = await dbConnection.search("slug","a-small-river-by-their-place");
+  const uu = await dbConnection.search("title","river");
   console.log(uu);
 }
-tstFn();
+//tstFn();
 
 app.listen(PORT, () => {
   console.log("Server fired up!");

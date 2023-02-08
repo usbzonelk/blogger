@@ -112,24 +112,17 @@ class dbMan {
   async search(property, txt) {
     try {
       const idx = {};
-      idx[property] = txt;
-      console.log(idx);
-      await this.collection.createIndex(idx);
-
+      idx[property] = "text";
+      const idxName = await this.collection.createIndex(idx);
       const query = { $text: { $search: `${txt}` } };
 
       let dataRet = [];
       const sort = { score: { $meta: "textScore" } };
-      const projection = {
-        _id: 0,
-        title: 1,
-        score: { $meta: "textScore" },
-      };
+
       const findResult = await this.collection.find(query).sort(sort);
       await findResult.forEach((data) => dataRet.push(data));
-
+      await this.collection.dropIndex(idxName);
       return dataRet;
-      
     } finally {
     }
   }
