@@ -17,15 +17,15 @@ const app = express();
 const PORT = "80";
 
 const root = {
-  getFullPost: (args) => {
-    return getFullPost(args.slug);
+  getFullPost: async (args) => {
+    return await getFullPost(args.slug);
   },
-  getAllFullPosts: () => {
-    return readAllPosts();
+  getAllFullPosts: async () => {
+    return await readAllPosts();
   },
 
-  addNewPost: (args) => {
-    writeNewPost(
+  addNewPost: async (args) => {
+    await writeNewPost(
       args.slug,
       args.title,
       args.content,
@@ -36,11 +36,11 @@ const root = {
       args.status
     );
   },
-  getCountPosts: (args) => {
-    return countCollection("posts", args.slug);
+  getCountPosts: async (args) => {
+    return await countCollection("posts", args.slug);
   },
-  getCountComments: (args) => {
-    return countCollection("comments", args.slug);
+  getCountComments: async (args) => {
+    return await countCollection("comments", args.slug);
   },
 };
 
@@ -126,7 +126,7 @@ async function countCollection(collection, slug) {
 
 async function tstFn() {
   await dbConnection.chnageCollection("posts");
-  const uu = await dbConnection.search("title","river");
+  const uu = await dbConnection.countQuery({ status: "published" });
   console.log(uu);
 }
 //tstFn();

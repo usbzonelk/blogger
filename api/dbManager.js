@@ -31,7 +31,7 @@ class dbMan {
           .match(/(?:"[^"]*"|^[^"]*$)/)[0]
           .replace(/"/g, "")
       );
-      return inputResult;
+      return inputResult[0];
     } finally {
       //await this.connection.client.close();
     }
@@ -98,14 +98,14 @@ class dbMan {
   async countTotal() {
     try {
       const estimate = await this.collection.estimatedDocumentCount();
-      return estimate;
+      return parseInt(estimate);
     } finally {
     }
   }
   async countQuery(query) {
     try {
       const count = await this.collection.countDocuments(query);
-      return count;
+      return count
     } finally {
     }
   }
