@@ -37,10 +37,16 @@ class dbMan {
     }
   }
 
-  async readData(query) {
+  async readData(query, ...returnValues) {
     try {
       let dataRet = [];
-      const findResult = await this.collection.find(query);
+      const projection = {};
+      if (returnValues) {
+        for (const _ of returnValues) {
+          projection[_] = 1;
+        }
+      }
+      const findResult = await this.collection.find(query).project(projection);
       await findResult.forEach((data) => dataRet.push(data));
       return dataRet;
     } finally {
@@ -48,10 +54,16 @@ class dbMan {
     }
   }
 
-  async readDataSingle(query) {
+  async readDataSingle(query, ...returnValues) {
     try {
       let dataRet = [];
-      const findResult = await this.collection.find(query);
+      const projection = {};
+      if (returnValues) {
+        for (const _ of returnValues) {
+          projection[_] = 1;
+        }
+      }
+      const findResult = await this.collection.find(query).project(projection);
       await findResult.forEach((data) => dataRet.push(data));
       return dataRet[0];
     } finally {
@@ -105,11 +117,11 @@ class dbMan {
   async countQuery(query) {
     try {
       const count = await this.collection.countDocuments(query);
-      return count
+      return count;
     } finally {
     }
   }
-  async search(property, txt) {
+  async search(property, txt, ...returnValues) {
     try {
       const idx = {};
       idx[property] = "text";
@@ -118,8 +130,16 @@ class dbMan {
 
       let dataRet = [];
       const sort = { score: { $meta: "textScore" } };
-
-      const findResult = await this.collection.find(query).sort(sort);
+      const projection = {};
+      if (returnValues) {
+        for (const _ of returnValues) {
+          projection[_] = 1;
+        }
+      }
+      const findResult = await this.collection
+        .find(query)
+        .project(projection)
+        .sort(sort);
       await findResult.forEach((data) => dataRet.push(data));
       await this.collection.dropIndex(idxName);
       return dataRet;

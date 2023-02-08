@@ -11,6 +11,12 @@ const schema = buildSchema(`
     imgs: [String]
   }
 
+  type Date{
+   fullDate: String
+   year: String
+   month: String
+  }
+
   input ImagesInput{
     header: String
     imgs: [String]
@@ -26,24 +32,57 @@ const schema = buildSchema(`
     title: String
     content: String
     labels: [String]
-    date: String
+    date: Date
     author: Author
     images: Images
     status: String
   }
-  
+
+  type SemiBlogPost {
+    _id: String
+    slug: String
+    title: String
+    image: String
+  }
+
   type Query {
     getFullPost(slug:String): BlogPost
     getAllFullPosts : [BlogPost]
-    getCountPosts(slug:String) : Int
+    getCountPosts : Int
     getCountComments(slug:String): Int
-
+    
+    getAllSlugs : [String]
+    getPostsWithThumb : [SemiBlogPost]
+    getPagesWithThumb : [SemiBlogPost]
+    getAllComments: [String]
+    getAllLabels: [String]
+    getPostsOfLabel(label:String) :[SemiBlogPost]
+    getSemiPostsWithState(state:String) :[SemiBlogPost] 
+    getAllAuthors: [String]
+    getPostsbyAuthor(username:String) :[SemiBlogPost]
+    getFullPage(slug:String): BlogPost
+    getAllFullPages : [BlogPost]
+    searchPosts(keywords:String) : [SemiBlogPost]
+    getRelatedPosts(post:String) : [SemiBlogPost]
+    countAllComments: [String]
+    getLabelCount(label:String) : Int
+    getAuthorCount(username:String) : Int
+    getCountPages(slug:String) : Int
+    getPostsByYear(year:Int) : Int
+    getPostCountByYear(year:Int) : Int
   }
    
 
   type Update {
     
     addNewPost(slug:String, title:String, content:String, labels:[String], date:String, author:AuthorInput, images:ImagesInput, status:String): String
+    
+    deletePost(slug:String) : Int
+    deleteLabel(label:String) : Int
+    deleteComment(_id:String) : Int
+    deleteAuthor(username:String) : Int
+    editPost(oldSlug:String, slug:String, title:String, content:String, labels:[String], date:String, author:AuthorInput, images:ImagesInput, status:String): String
+    changePostStatus(slug:String) : String
   }
 
   schema {
@@ -58,13 +97,8 @@ const bloggPost = {
   title: "A Small River by Their Place",
   content:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Satis est ad hoc responsum. Quamquam wordpress blog theme recte et reiecta dicere licebit. Quam nemo umquam voluptatem appellavit, appellat erat enim polemonis duo reges constructio. interrete. Nihil opus est exemplis hoc facere longius.",
-  labels: ["TV", "Cable TV", "Wifi", "Kitchen"],
   date: new Date(),
-  author: {
-    name: "John",
-  },
-
-  images: {
+    images: {
     header:
       "https://a0.muscache.com/im/pictures/e83e702f-ef49-40fb-8fa0-6512d7e26e9b.jpg?aki_policy=large",
     imgs: [

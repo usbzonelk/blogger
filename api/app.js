@@ -36,8 +36,8 @@ const root = {
       args.status
     );
   },
-  getCountPosts: async (args) => {
-    return await countCollection("posts", args.slug);
+  getCountPosts: async () => {
+    return await countTotal("posts");
   },
   getCountComments: async (args) => {
     return await countCollection("comments", args.slug);
@@ -94,7 +94,6 @@ async function writeNewPost(
   blogPost.slug = slug;
   blogPost.title = title;
   blogPost.content = content;
-  blogPost.labels = labels;
   blogPost.date = date;
   if (status) {
     blogPost.status = status;
@@ -102,6 +101,12 @@ async function writeNewPost(
   blogPost.images = images;
   await dbConnection.chnageCollection("posts");
   const yy = await dbConnection.writeData(blogPost);
+
+  blogPost.labels = labels;
+  await dbConnection.chnageCollection("labels");
+  for (const _ in labels) {
+    await dbConnection.writeData(_);
+  }
 
   return yy[0];
 }
@@ -126,7 +131,7 @@ async function countCollection(collection, slug) {
 
 async function tstFn() {
   await dbConnection.chnageCollection("posts");
-  const uu = await dbConnection.countQuery({ status: "published" });
+  const uu = await dbConnection.search("slug","qwe", "date","labels")
   console.log(uu);
 }
 //tstFn();
