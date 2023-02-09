@@ -42,7 +42,7 @@ const schema = buildSchema(`
     _id: String
     slug: String
     title: String
-    image: String
+    images: Images
   }
 
   type Query {
@@ -56,19 +56,20 @@ const schema = buildSchema(`
     getPagesWithThumb : [SemiBlogPost]
     getAllComments: [String]
     getAllLabels: [String]
+    getAllAuthors: [String]
+    getAllFullPages : [BlogPost]
     getPostsOfLabel(label:String) :[SemiBlogPost]
     getSemiPostsWithState(state:String) :[SemiBlogPost] 
-    getAllAuthors: [String]
     getPostsbyAuthor(username:String) :[SemiBlogPost]
     getFullPage(slug:String): BlogPost
-    getAllFullPages : [BlogPost]
     searchPosts(keywords:String) : [SemiBlogPost]
     getRelatedPosts(post:String) : [SemiBlogPost]
+    getPostsByYear(year:Int) : Int
+
     countAllComments: [String]
     getLabelCount(label:String) : Int
     getAuthorCount(username:String) : Int
     getCountPages(slug:String) : Int
-    getPostsByYear(year:Int) : Int
     getPostCountByYear(year:Int) : Int
   }
    

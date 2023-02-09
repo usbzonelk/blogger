@@ -18,10 +18,10 @@ const PORT = "80";
 
 const root = {
   getFullPost: async (args) => {
-    return await getFullPost(args.slug);
+    return await getFullSingle(args.slug);
   },
   getAllFullPosts: async () => {
-    return await readAllPosts();
+    return await readAllCollections("posts");
   },
 
   addNewPost: async (args) => {
@@ -37,10 +37,49 @@ const root = {
     );
   },
   getCountPosts: async () => {
-    return await countTotal("posts");
+    return await countCollection("posts");
   },
   getCountComments: async (args) => {
     return await countCollection("comments", args.slug);
+  },
+  countAllComments: async () => {
+    return await countCollection("comments");
+  },
+  getLabelCount: async (args) => {
+    return await countCollection("labels", args.label);
+  },
+  getAuthorCount: async (args) => {
+    return await countCollection("authors", args.username);
+  },
+  getCountPages: async () => {
+    return await countCollection("pages");
+  },
+  getPostCountByYear: async (args) => {
+    return await countCollection("posts", args.year);
+  },
+  getAllSlugs: async () => {
+    return await readAllSlugs();
+  },
+  getPostsWithThumb: async () => {
+    return await getSemiPosts("posts");
+  },
+  getPagesWithThumb: async () => {
+    return await getSemiPosts("pages");
+  },
+  getAllComments: async () => {
+    return await readAllCollections("comments");
+  },
+  getAllLabels: async () => {
+    return await readAllCollections("labels");
+  },
+  getAllAuthors: async () => {
+    return await readAllCollections("authors");
+  },
+  getAllFullPages: async () => {
+    return await readAllCollections("pages");
+  },
+  getPostsOfLabel: async (args) => {
+    return await getSemiPosts("labels",args.label);
   },
 };
 
@@ -68,15 +107,26 @@ app.use(
   })
 );
 
-async function readAllPosts() {
-  await dbConnection.chnageCollection("posts");
+async function readAllCollections(collection) {
+  await dbConnection.chnageCollection(collection);
+  const yy = await dbConnection.readData();
+  return yy;
+}
+async function readAllSlugs() {
+  await dbConnection.chnageCollection("slugs");
   const yy = await dbConnection.readData();
   return yy;
 }
 
-async function getFullPost(slug) {
+async function getFullSingle(slug) {
   await dbConnection.chnageCollection("posts");
   const yy = await dbConnection.readDataSingle({ slug: slug });
+  return yy;
+}
+
+async function getSemiPosts(type, query=null) {
+  await dbConnection.chnageCollection(type);
+  const yy = await dbConnection.readData(query, "images", "slug", "title");
   return yy;
 }
 
@@ -126,13 +176,13 @@ async function countCollection(collection, slug) {
       yy = temps;
     }
   }
-  return yy;
+  //console.log(yy);
 }
 
 async function tstFn() {
-  await dbConnection.chnageCollection("posts");
-  const uu = await dbConnection.search("slug","qwe", "date","labels")
-  console.log(uu);
+  await getSemiPosts();
+  const uu = await dbConnection.search("slug", "qwe", "date", "labels");
+  //console.log(uu);
 }
 //tstFn();
 

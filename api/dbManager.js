@@ -37,7 +37,7 @@ class dbMan {
     }
   }
 
-  async readData(query, ...returnValues) {
+  async readData(query,...returnValues) {
     try {
       let dataRet = [];
       const projection = {};
