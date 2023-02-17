@@ -113,6 +113,16 @@ const root = {
   getPostsByYear: async (args) => {
     return await getSemiPosts("posts", { year: args.year });
   },
+  deletePost: async (args) => {
+    return await deleteItm("posts",{slug:args.slug});
+  },
+  deleteLabel: async (args) => {
+    return await deleteItm("labels",{name:args.label});
+  },
+  deleteAuthor: async (args) => {
+    return await deleteItm("authors",{name:args.username});
+  },
+
 };
 
 /*
@@ -139,6 +149,11 @@ app.use(
   })
 );
 
+async function deleteItm(type, query) {
+  await dbConnection.chnageCollection(type);
+  const yy = await dbConnection.deleteSingle(query);
+  return yy;
+}
 async function getPostAttributes(post, attribute) {
   await dbConnection.chnageCollection(attribute);
   const yy = await dbConnection.search("slugs", post, "name");
