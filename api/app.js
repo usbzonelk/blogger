@@ -101,6 +101,14 @@ const root = {
   getPostsbyAuthor: async (args) => {
     return await getJoins("authors", "name", args.username, "posts");
   },
+
+  getRelatedPosts: async (args) => {
+    args.post 
+
+  },
+  getPostsByYear: async (args) => {
+    return await getSemiPosts("posts", { year: args.year });
+  },
 };
 
 /*
@@ -127,6 +135,11 @@ app.use(
   })
 );
 
+async function getPostAttributes(post, attribute) {
+  await dbConnection.chnageCollection(attribute);
+  const yy = await dbConnection.search("slugs", post, "name")
+  return yy;
+}
 async function readAllCollections(collection) {
   await dbConnection.chnageCollection(collection);
   const yy = await dbConnection.readData();
@@ -243,16 +256,8 @@ async function searchDb(collection, keyword, keys, ...returnValues) {
 }
 
 async function tstFn() {
-  const uu = await searchDb(
-    "posts",
-    "river",
-    ["title", "slug"],
-    "images",
-    "slug",
-    "title"
-  );
-  // const uu = await dbConnection.search("slug", "qwe", "date", "labels");
-  console.log(uu);
+ const uu = await getPostAttributes("a-small-river-by-their-place", "labels")
+ console.log(uu);
 }
 //tstFn();
 
