@@ -223,16 +223,20 @@ async function getJoins(
 }
 
 async function searchDb(collection, keyword, keys, ...returnValues) {
-  console.log(keys);
   await dbConnection.chnageCollection(collection);
   let searchResult = [];
   if (keys) {
     for (const key of keys) {
-      const result = await dbConnection.search(key, keyword, ...returnValues);
-      if (result.every((val) => searchResult.includes(val))) {
-        continue;
+      const results = await dbConnection.search(key, keyword, ...returnValues);
+      if (results) {
+        for (const result of results) {
+          if (!searchResult.find((res) => result === res)) {
+            //continue;
+            console.log(searchResult.find((res) => result === res));
+            searchResult = searchResult.concat(result);
+          }
+        }
       }
-      searchResult = searchResult.concat(result);
     }
   }
   return searchResult;
