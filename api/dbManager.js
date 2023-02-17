@@ -153,22 +153,19 @@ class dbMan {
     secondField,
     outputName
   ) {
+    const dataRet = [];
     this.chnageCollection(collection1);
-    this.collection
-      .aggregate([
-        {
-          $lookup: {
-            from: collection2,
-            localField: firstField,
-            foreignField: secondField,
-            as: outputName,
-          },
+    const findResult = await this.collection.aggregate([
+      {
+        $lookup: {
+          from: collection2,
+          localField: firstField,
+          foreignField: secondField,
+          as: outputName,
         },
-      ])
-      .toArray(function (err, result) {
-        if (err) throw err;
-        console.log(result);
-      });
+      },
+    ]);
+    await findResult.forEach((data) => dataRet.push(data));
   }
 }
 
