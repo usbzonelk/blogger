@@ -85,6 +85,11 @@ const root = {
   getSemiPostsWithState: async (args) => {
     return await getSemiPosts("posts", { state: args.state });
   },
+  getPostsbyAuthor: async (args) => {
+    return await getJoins("authors", "name", args.username, "posts");
+
+  },
+
 };
 
 /*
@@ -207,7 +212,7 @@ async function getJoins(
 }
 
 async function tstFn() {
-  const yy = await getJoins("labels", "name", "lol", "posts");
+  const yy = await getJoins("authors", "name", "Jon", "posts");
   console.log(yy);
   // const uu = await dbConnection.search("slug", "qwe", "date", "labels");
   //console.log(uu);
