@@ -18,7 +18,10 @@ const PORT = "80";
 
 const root = {
   getFullPost: async (args) => {
-    return await getFullSingle(args.slug);
+    return await getFullSingle("posts", args.slug);
+  },
+  getFullPage: async (args) => {
+    return await getFullSingle("pages", args.slug);
   },
   getAllFullPosts: async () => {
     return await readAllCollections("posts");
@@ -80,16 +83,13 @@ const root = {
   },
   getPostsOfLabel: async (args) => {
     return await getJoins("labels", "name", args.label, "posts");
-
   },
   getSemiPostsWithState: async (args) => {
     return await getSemiPosts("posts", { state: args.state });
   },
   getPostsbyAuthor: async (args) => {
     return await getJoins("authors", "name", args.username, "posts");
-
   },
-
 };
 
 /*
@@ -127,8 +127,8 @@ async function readAllSlugs() {
   return yy;
 }
 
-async function getFullSingle(slug) {
-  await dbConnection.chnageCollection("posts");
+async function getFullSingle(type, slug) {
+  await dbConnection.chnageCollection(type);
   const yy = await dbConnection.readDataSingle({ slug: slug });
   return yy;
 }
