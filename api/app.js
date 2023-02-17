@@ -103,8 +103,12 @@ const root = {
   },
 
   getRelatedPosts: async (args) => {
-    args.post 
-
+    let relatedPosts = [];
+    const postLabels = await getPostAttributes(args.post, "labels");
+    for (const label of postLabels) {
+      relatedPosts.push(await getJoins("labels", "name", label.name, "posts"));
+    }
+    return relatedPosts;
   },
   getPostsByYear: async (args) => {
     return await getSemiPosts("posts", { year: args.year });
@@ -137,7 +141,7 @@ app.use(
 
 async function getPostAttributes(post, attribute) {
   await dbConnection.chnageCollection(attribute);
-  const yy = await dbConnection.search("slugs", post, "name")
+  const yy = await dbConnection.search("slugs", post, "name");
   return yy;
 }
 async function readAllCollections(collection) {
@@ -256,8 +260,8 @@ async function searchDb(collection, keyword, keys, ...returnValues) {
 }
 
 async function tstFn() {
- const uu = await getPostAttributes("a-small-river-by-their-place", "labels")
- console.log(uu);
+  const uu = await getPostAttributes("a-small-river-by-their-place", "labels");
+  console.log(uu);
 }
 //tstFn();
 
