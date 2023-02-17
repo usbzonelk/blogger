@@ -17,6 +17,17 @@ const app = express();
 const PORT = "80";
 
 const root = {
+  searchPosts: async (args) => {
+    return await searchDb(
+      "posts",
+      args.keywords,
+      ["title", "slug"],
+      "images",
+      "slug",
+      "title"
+    );
+  },
+
   getFullPost: async (args) => {
     return await getFullSingle("posts", args.slug);
   },
@@ -211,11 +222,33 @@ async function getJoins(
   return allFound;
 }
 
+async function searchDb(collection, keyword, keys, ...returnValues) {
+  console.log(keys);
+  await dbConnection.chnageCollection(collection);
+  let searchResult = [];
+  if (keys) {
+    for (const key of keys) {
+      const result = await dbConnection.search(key, keyword, ...returnValues);
+      if (result.every((val) => searchResult.includes(val))) {
+        continue;
+      }
+      searchResult = searchResult.concat(result);
+    }
+  }
+  return searchResult;
+}
+
 async function tstFn() {
-  const yy = await getJoins("authors", "name", "Jon", "posts");
-  console.log(yy);
+  const uu = await searchDb(
+    "posts",
+    "river",
+    ["title", "slug"],
+    "images",
+    "slug",
+    "title"
+  );
   // const uu = await dbConnection.search("slug", "qwe", "date", "labels");
-  //console.log(uu);
+  console.log(uu);
 }
 //tstFn();
 
