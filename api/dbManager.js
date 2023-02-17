@@ -37,7 +37,7 @@ class dbMan {
     }
   }
 
-  async readData(query,...returnValues) {
+  async readData(query, ...returnValues) {
     try {
       let dataRet = [];
       const projection = {};
@@ -145,6 +145,30 @@ class dbMan {
       return dataRet;
     } finally {
     }
+  }
+  async getInnerJoin(
+    collection1,
+    collection2,
+    firstField,
+    secondField,
+    outputName
+  ) {
+    this.chnageCollection(collection1);
+    this.collection
+      .aggregate([
+        {
+          $lookup: {
+            from: collection2,
+            localField: firstField,
+            foreignField: secondField,
+            as: outputName,
+          },
+        },
+      ])
+      .toArray(function (err, result) {
+        if (err) throw err;
+        console.log(result);
+      });
   }
 }
 
