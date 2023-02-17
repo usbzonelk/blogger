@@ -40,13 +40,13 @@ const root = {
     return await countCollection("posts");
   },
   getCountComments: async (args) => {
-    return await countCollection("comments", {slug:args.slug});
+    return await countCollection("comments", { slug: args.slug });
   },
   countAllComments: async () => {
     return await countCollection("comments");
   },
   getLabelCount: async (args) => {
-    return await countCollection("labels", {slug:args.label});
+    return await countCollection("labels", { slug: args.label });
   },
   getAuthorCount: async (args) => {
     return await countCollection("authors");
@@ -55,7 +55,7 @@ const root = {
     return await countCollection("pages");
   },
   getPostCountByYear: async (args) => {
-    return await countCollection("posts", {year: args.year});
+    return await countCollection("posts", { year: args.year });
   },
   getAllSlugs: async () => {
     return await readAllSlugs();
@@ -79,12 +79,12 @@ const root = {
     return await readAllCollections("pages");
   },
   getPostsOfLabel: async (args) => {
-    return await getSemiPosts("labels",args.label);
-  },
-  getSemiPostsWithState: async(args) => {
-    return await getSemiPosts("posts",{state: args.state});
+    return await getJoins("labels", "name", args.label, "posts");
 
-  }
+  },
+  getSemiPostsWithState: async (args) => {
+    return await getSemiPosts("posts", { state: args.state });
+  },
 };
 
 /*
@@ -128,7 +128,7 @@ async function getFullSingle(slug) {
   return yy;
 }
 
-async function getSemiPosts(type, query=null) {
+async function getSemiPosts(type, query = null) {
   await dbConnection.chnageCollection(type);
   const yy = await dbConnection.readData(query, "images", "slug", "title");
   return yy;
@@ -183,9 +183,33 @@ async function countCollection(collection, search) {
   //console.log(yy);
 }
 
+async function getJoins(
+  collection1,
+  firstQueryKey,
+  firstQueryValue,
+  collection2
+) {
+  await dbConnection.chnageCollection(collection1);
+  const firstQueryResults = await dbConnection.search(
+    firstQueryKey,
+    firstQueryValue
+  );
+  const allFound = [];
+  if (firstQueryResults[0].slugs) {
+    for (const res1 of firstQueryResults[0].slugs) {
+      const post1 = await getSemiPosts(collection2, { slug: res1 });
+      if (post1[0]) {
+        allFound.push(post1[0]);
+      }
+    }
+  }
+  return allFound;
+}
+
 async function tstFn() {
-  await getSemiPosts();
-  const uu = await dbConnection.search("slug", "qwe", "date", "labels");
+  const yy = await getJoins("labels", "name", "lol", "posts");
+  console.log(yy);
+  // const uu = await dbConnection.search("slug", "qwe", "date", "labels");
   //console.log(uu);
 }
 //tstFn();
