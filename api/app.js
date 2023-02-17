@@ -40,22 +40,22 @@ const root = {
     return await countCollection("posts");
   },
   getCountComments: async (args) => {
-    return await countCollection("comments", args.slug);
+    return await countCollection("comments", {slug:args.slug});
   },
   countAllComments: async () => {
     return await countCollection("comments");
   },
   getLabelCount: async (args) => {
-    return await countCollection("labels", args.label);
+    return await countCollection("labels", {slug:args.label});
   },
   getAuthorCount: async (args) => {
-    return await countCollection("authors", args.username);
+    return await countCollection("authors");
   },
   getCountPages: async () => {
     return await countCollection("pages");
   },
   getPostCountByYear: async (args) => {
-    return await countCollection("posts", args.year);
+    return await countCollection("posts", {year: args.year});
   },
   getAllSlugs: async () => {
     return await readAllSlugs();
@@ -81,6 +81,10 @@ const root = {
   getPostsOfLabel: async (args) => {
     return await getSemiPosts("labels",args.label);
   },
+  getSemiPostsWithState: async(args) => {
+    return await getSemiPosts("posts",{state: args.state});
+
+  }
 };
 
 /*
@@ -161,11 +165,11 @@ async function writeNewPost(
   return yy[0];
 }
 
-async function countCollection(collection, slug) {
+async function countCollection(collection, search) {
   let yy = 0;
-  if (slug) {
+  if (search) {
     await dbConnection.chnageCollection(collection);
-    const temps = await dbConnection.countQuery({ slug: slug });
+    const temps = await dbConnection.countQuery(search);
     if (temps) {
       yy = temps;
     }
