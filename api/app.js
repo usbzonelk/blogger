@@ -133,13 +133,13 @@ const root = {
 
     return await updateItmPartially("posts", { slug: args.oldSlug }, result);
   },
-  /*
-
-
-  
-};
-
-  */
+  changePostStatus: async (args) => {
+    return await updateItmPartially(
+      "posts",
+      { slug: args.slug },
+      { state: args.status }
+    );
+  },
 };
 
 /*

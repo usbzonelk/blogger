@@ -83,7 +83,7 @@ const schema = buildSchema(`
     deleteComment(_id:String) : Int
     deleteAuthor(username:String) : Int
     editPost(oldSlug:String, slug:String, title:String, content:String, labels:[String], date:String, author:AuthorInput, images:ImagesInput, status:String): String
-    changePostStatus(slug:String) : String
+    changePostStatus(slug:String, status:String) : String
   }
 
   schema {
