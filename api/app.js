@@ -114,15 +114,24 @@ const root = {
     return await getSemiPosts("posts", { year: args.year });
   },
   deletePost: async (args) => {
-    return await deleteItm("posts",{slug:args.slug});
+    return await deleteItm("posts", { slug: args.slug });
   },
   deleteLabel: async (args) => {
-    return await deleteItm("labels",{name:args.label});
+    return await deleteItm("labels", { name: args.label });
   },
   deleteAuthor: async (args) => {
-    return await deleteItm("authors",{name:args.username});
+    return await deleteItm("authors", { name: args.username });
   },
-
+  deleteLabel: async (args) => {
+    return await deleteItm("authors", { name: args.username });
+  },
+  editPost: async (args) => {
+    return await updateItm(
+      "posts",
+      { slug: args.oldSlug },
+      { slug: args.slug, title:args.title, content: args.content, images:args.images, status:args.status }
+    );
+  },
 };
 
 /*
@@ -154,6 +163,12 @@ async function deleteItm(type, query) {
   const yy = await dbConnection.deleteSingle(query);
   return yy;
 }
+async function updateItm(type, query, newData) {
+  await dbConnection.chnageCollection(type);
+  const yy = await dbConnection.updateData(query, newData);
+  return yy;
+}
+
 async function getPostAttributes(post, attribute) {
   await dbConnection.chnageCollection(attribute);
   const yy = await dbConnection.search("slugs", post, "name");
