@@ -134,11 +134,16 @@ const root = {
     return await updateItmPartially("posts", { slug: args.oldSlug }, result);
   },
   changePostStatus: async (args) => {
-    return await updateItmPartially(
-      "posts",
-      { slug: args.slug },
-      { state: args.status }
+    const providedArgs = ["published", "draft", "trash"].filter(
+      (key) => key === args.status
     );
+    if (providedArgs) {
+      return await updateItmPartially(
+        "posts",
+        { slug: args.slug },
+        { state: args.status }
+      );
+    }
   },
 };
 
