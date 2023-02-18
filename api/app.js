@@ -126,12 +126,20 @@ const root = {
     return await deleteItm("authors", { name: args.username });
   },
   editPost: async (args) => {
-    return await updateItm(
-      "posts",
-      { slug: args.oldSlug },
-      { slug: args.slug, title:args.title, content: args.content, images:args.images, status:args.status }
-    );
+    const argKeys = Object.keys(args);
+    const providedArgs = argKeys.filter((key) => args[key] !== undefined);
+    const result = {};
+    providedArgs.forEach((key) => (result[key] = args[key]));
+
+    return await updateItmPartially("posts", { slug: args.oldSlug }, result);
   },
+  /*
+
+
+  
+};
+
+  */
 };
 
 /*
@@ -168,7 +176,11 @@ async function updateItm(type, query, newData) {
   const yy = await dbConnection.updateData(query, newData);
   return yy;
 }
-
+async function updateItmPartially(type, key, val, newstuff) {
+  await dbConnection.chnageCollection(type);
+  const yy = await dbConnection.updatePartially(key, val, newstuff);
+  return yy;
+}
 async function getPostAttributes(post, attribute) {
   await dbConnection.chnageCollection(attribute);
   const yy = await dbConnection.search("slugs", post, "name");

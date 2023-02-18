@@ -90,6 +90,21 @@ class dbMan {
       // await client.close();
     }
   }
+  async updatePartially(criteria_key, criteria_val, newStuff) {
+    try {
+      const criteria = {};
+      criteria[criteria_key] = { criteria_val };
+      //{ $set: { status: "inactive" } }
+      const setNow = { $set: newStuff };
+
+      const result = await this.collection.updateOne(criteria, setNow);
+      console.log(
+        `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
+      );
+    } finally {
+      // await client.close();
+    }
+  }
   async deleteSingle(query) {
     try {
       const result = await this.collection.deleteOne(query);
