@@ -186,6 +186,18 @@ async function updateItmPartially(type, key, val, newstuff) {
   const yy = await dbConnection.updatePartially(key, val, newstuff);
   return yy;
 }
+async function pushNewItems(type, key, val, newstuff) {
+  const enteredKey = Object.keys(newstuff)[0];
+  await dbConnection.chnageCollection(type);
+  const yy = await dbConnection.pushNewItem(
+    key,
+    val,
+    enteredKey,
+    newstuff[enteredKey]
+  );
+  return yy;
+}
+
 async function getPostAttributes(post, attribute) {
   await dbConnection.chnageCollection(attribute);
   const yy = await dbConnection.search("slugs", post, "name");
@@ -236,11 +248,13 @@ async function writeNewPost(
   await dbConnection.chnageCollection("posts");
   const yy = await dbConnection.writeData(blogPost);
 
-  blogPost.labels = labels;
-  await dbConnection.chnageCollection("labels");
+  //await dbConnection.chnageCollection("labels");
   for (const _ in labels) {
-    await dbConnection.writeData(_);
+    await pushNewItems("labels", "name", _, { slugs: slug });
   }
+  
+  //await dbConnection.chnageCollection("authors");
+  await pushNewItems("authors", "name", author, { slugs: slug });
 
   return yy[0];
 }

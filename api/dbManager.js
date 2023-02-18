@@ -92,12 +92,30 @@ class dbMan {
   }
   async updatePartially(criteria_key, criteria_val, newStuff) {
     try {
+      const options = { upsert: true };
       const criteria = {};
       criteria[criteria_key] = { criteria_val };
       //{ $set: { status: "inactive" } }
       const setNow = { $set: newStuff };
 
-      const result = await this.collection.updateOne(criteria, setNow);
+      const result = await this.collection.updateOne(criteria, setNow, options);
+      console.log(
+        `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
+      );
+    } finally {
+      // await client.close();
+    }
+  }
+  async pushNewItem(criteria_key, criteria_val, array_name, newValue) {
+    try {
+      const options = { upsert: true };
+      const criteria = {};
+      criteria[criteria_key] = { criteria_val };
+      const array = {};
+      array[array_name] = newValue;
+      const setNow = { $push: array };
+
+      const result = await this.collection.updateOne(criteria, setNow, options);
       console.log(
         `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
       );
