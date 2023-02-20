@@ -180,6 +180,16 @@ async function pswValidate(plainPass, email) {
   const yy = await dbConnection.readData({ email: email }, "password");
   return await pswManagement.validatePass(plainPass, yy[0]["password"]);
 }
+async function pswStore(plainPass, email) {
+  const pass = await pswManagement.hashNewPass(plainPass);
+  console.log({ password: pass[0] });
+  await dbConnection.chnageCollection("authors");
+  const yy = await dbConnection.updatePartially("email", email, {
+    password: pass[0],
+    salt: pass[1],
+  });
+  return yy;
+}
 
 async function deleteItm(type, query) {
   await dbConnection.chnageCollection(type);
@@ -331,10 +341,10 @@ async function searchDb(collection, keyword, keys, ...returnValues) {
 }
 
 async function tstFn() {
-  const uu = await pswValidate("asd", "admin@admin.lk")
+  const uu = await pswStore("xyz", "admin@admin.lk");
   console.log(uu);
 }
-tstFn();
+//tstFn();
 
 app.listen(PORT, () => {
   console.log("Server fired up!");

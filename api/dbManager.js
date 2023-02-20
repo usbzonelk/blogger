@@ -94,7 +94,8 @@ class dbMan {
     try {
       const options = { upsert: true };
       const criteria = {};
-      criteria[criteria_key] = { criteria_val };
+      criteria[criteria_key] = criteria_val;
+      console.log(criteria);
       //{ $set: { status: "inactive" } }
       const setNow = { $set: newStuff };
 
