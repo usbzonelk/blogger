@@ -2,6 +2,7 @@ const databse = require("./dbManager");
 const graphQL = require("./graph");
 const bodyParser = require("body-parser");
 const pswManagement = require("./pswMgmt");
+const { generateAccessToken, authenticateToken } = require("./authUser");
 
 const express = require("express");
 const { graphqlHTTP } = require("express-graphql");
@@ -154,8 +155,8 @@ const root = {
   },
 };
 
-const contexUser = {
-  name: null,
+const contextUser = {
+  email: null,
 };
 /*
 app.get("/tshirt", (req, res) => {
@@ -172,8 +173,16 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/auth", (req, res) => {
-  res.status(200).send({ name: "pky" });
+app.use("/auth", (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (token == null) return res.sendStatus(401);
+  const usr = authenticateToken(token);
+  if (usr) {
+    contextUser.email = usr;
+  }
+  next()
 });
 
 app.use(
@@ -182,9 +191,20 @@ app.use(
     schema: graphQL.schema,
     rootValue: root,
     graphiql: true,
-    context: contexUser,
+    context: contextUser,
   })
 );
+
+async function validateUsr() {}
+
+async function signinUsr(plainPass, email) {
+  const passTrue = await pswValidate(plainPass, email);
+  if (!passTrue) {
+    return null;
+  }
+  generateAccessToken(email);
+  contextUser.email = email;
+}
 
 async function pswValidate(plainPass, email) {
   await dbConnection.chnageCollection("authors");
