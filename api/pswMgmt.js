@@ -29,5 +29,11 @@ const validatePass = async (plainTextPassword, hashing) => {
   return u;
 };
 
+
+async function tstFn() {
+  const uu = await hashNewPass("asd");
+  return uu;
+}
+
 module.exports.hashNewPass = hashNewPass;
 module.exports.validatePass = validatePass;

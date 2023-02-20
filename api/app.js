@@ -1,6 +1,7 @@
 const databse = require("./dbManager");
 const graphQL = require("./graph");
 const bodyParser = require("body-parser");
+const pswManagement = require("./pswMgmt");
 
 const express = require("express");
 const { graphqlHTTP } = require("express-graphql");
@@ -49,6 +50,9 @@ const root = {
       args.images,
       args.status
     );
+  },
+  registerUser: async () => {
+    return await countCollection("posts");
   },
   getCountPosts: async () => {
     return await countCollection("posts");
@@ -171,6 +175,12 @@ app.use(
   })
 );
 
+async function pswValidate(plainPass, email) {
+  await dbConnection.chnageCollection("authors");
+  const yy = await dbConnection.readData({ email: email }, "password");
+  return await pswManagement.validatePass(plainPass, yy[0]["password"]);
+}
+
 async function deleteItm(type, query) {
   await dbConnection.chnageCollection(type);
   const yy = await dbConnection.deleteSingle(query);
@@ -252,7 +262,7 @@ async function writeNewPost(
   for (const _ in labels) {
     await pushNewItems("labels", "name", _, { slugs: slug });
   }
-  
+
   //await dbConnection.chnageCollection("authors");
   await pushNewItems("authors", "name", author, { slugs: slug });
 
@@ -321,10 +331,10 @@ async function searchDb(collection, keyword, keys, ...returnValues) {
 }
 
 async function tstFn() {
-  const uu = await getPostAttributes("a-small-river-by-their-place", "labels");
+  const uu = await pswValidate("asd", "admin@admin.lk")
   console.log(uu);
 }
-//tstFn();
+tstFn();
 
 app.listen(PORT, () => {
   console.log("Server fired up!");
