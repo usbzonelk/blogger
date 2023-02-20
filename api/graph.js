@@ -76,7 +76,7 @@ const schema = buildSchema(`
 
   type Update {
     registerUser(username:String, email:String, password:String):String
-
+    chnageUsrPass(newPass:String, mail:String):String
     addNewPost(slug:String, title:String, content:String, labels:[String], date:String, author:AuthorInput, images:ImagesInput, status:String): String
     
     deletePost(slug:String) : Int

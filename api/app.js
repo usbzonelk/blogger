@@ -137,6 +137,10 @@ const root = {
 
     return await updateItmPartially("posts", { slug: args.oldSlug }, result);
   },
+  chnageUsrPass: async (args) => {
+    return await pswStore(args.newPass, args.mail)
+
+  },
   changePostStatus: async (args) => {
     const providedArgs = ["published", "draft", "trash"].filter(
       (key) => key === args.status

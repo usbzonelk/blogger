@@ -83,9 +83,8 @@ class dbMan {
         updateDoc,
         options
       );
-      console.log(
-        `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
-      );
+
+      return `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`;
     } finally {
       // await client.close();
     }
@@ -100,11 +99,10 @@ class dbMan {
       const setNow = { $set: newStuff };
 
       const result = await this.collection.updateOne(criteria, setNow, options);
-      console.log(
-        `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
-      );
+      const msg = `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`;
+
+      return `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`;
     } finally {
-      // await client.close();
     }
   }
   async pushNewItem(criteria_key, criteria_val, array_name, newValue) {
@@ -117,9 +115,8 @@ class dbMan {
       const setNow = { $push: array };
 
       const result = await this.collection.updateOne(criteria, setNow, options);
-      console.log(
-        `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`
-      );
+
+      return `${result.matchedCount} document(s) matched the filter, updated ${result.modifiedCount} document(s)`;
     } finally {
       // await client.close();
     }
