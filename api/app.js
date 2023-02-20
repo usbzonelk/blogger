@@ -179,10 +179,17 @@ app.use("/auth", (req, res, next) => {
 
   if (token == null) return res.sendStatus(401);
   const usr = authenticateToken(token);
-  if (usr) {
+  if (usr == "error") {
+    contextUser.email = null;
+    res.sendStatus(401);
+  } else {
     contextUser.email = usr;
   }
-  next()
+  next();
+});
+
+app.use("signin", (req, res, next) => {
+  next();
 });
 
 app.use(
