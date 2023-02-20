@@ -179,16 +179,29 @@ app.use("/auth", (req, res, next) => {
 
   if (token == null) return res.sendStatus(401);
   const usr = authenticateToken(token);
-  if (usr == "error") {
+  if (!usr) {
     contextUser.email = null;
-    res.sendStatus(401);
+    res.status(401).send("Forbidden Biatch");
   } else {
     contextUser.email = usr;
+    res.status(200).send(contextUser.email);
   }
   next();
 });
 
-app.use("signin", (req, res, next) => {
+app.use("/signin", async (req, res, next) => {
+  if (!(req.body.password && req.body.mail)) {
+    return res.status(403).send("enter both psw+mail");
+  }
+  const pass = req.body.password;
+  const mail = req.body.mail;
+
+  const isValid = await signinUsr(pass, mail);
+  if (!isValid) {
+    res.sendStatus(403);
+  } else {
+    res.status(200).json({ token: isValid });
+  }
   next();
 });
 
@@ -202,15 +215,17 @@ app.use(
   })
 );
 
-async function validateUsr() {}
+async function validateUsr(token) {
+  authenticateToken(token);
+}
 
 async function signinUsr(plainPass, email) {
   const passTrue = await pswValidate(plainPass, email);
   if (!passTrue) {
-    return null;
+    return false;
   }
-  generateAccessToken(email);
   contextUser.email = email;
+  return generateAccessToken(email);
 }
 
 async function pswValidate(plainPass, email) {

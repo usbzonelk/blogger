@@ -7,24 +7,24 @@ dotenv.config();
 process.env.TOKEN_SECRET;
 
 const generateAccessToken = (username) => {
-
-  process.env.TOKEN_SECRET = jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: "7d" });
-  return process.env.TOKEN_SECRET;
+  console.log(username);
+  const token = jwt.sign({ email: username }, process.env.TOKEN_SECRET, {
+    expiresIn: "7d",
+  });
+  return token;
 };
 
 const authenticateToken = (token) => {
-
-
+  let retVal;
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-    console.log(err);
-
-    if (err) return "error";
-
-    return user;
-
-    
+    if (err) {
+      retVal = false;
+    } else {
+      retVal = user.email;
+    }
   });
+  return retVal;
 };
 
-module.exports.generateAccessToken = generateAccessToken
-module.exports.authenticateToken = authenticateToken
+module.exports.generateAccessToken = generateAccessToken;
+module.exports.authenticateToken = authenticateToken;
