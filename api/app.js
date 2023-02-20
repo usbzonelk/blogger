@@ -138,8 +138,7 @@ const root = {
     return await updateItmPartially("posts", { slug: args.oldSlug }, result);
   },
   chnageUsrPass: async (args) => {
-    return await pswStore(args.newPass, args.mail)
-
+    return await pswStore(args.newPass, args.mail);
   },
   changePostStatus: async (args) => {
     const providedArgs = ["published", "draft", "trash"].filter(
@@ -155,6 +154,9 @@ const root = {
   },
 };
 
+const contexUser = {
+  name: null,
+};
 /*
 app.get("/tshirt", (req, res) => {
   res.status(200).send({ name: "pky" });
@@ -170,12 +172,17 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use("/auth", (req, res) => {
+  res.status(200).send({ name: "pky" });
+});
+
 app.use(
   "/1",
   graphqlHTTP({
     schema: graphQL.schema,
     rootValue: root,
     graphiql: true,
+    context: contexUser,
   })
 );
 
