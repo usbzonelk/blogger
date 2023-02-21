@@ -89,7 +89,7 @@ const root = {
     return await readAllCollections("comments");
   },
   getAllLabels: async () => {
-    return await readAllCollections("labels");
+    return await readAllCollections("labels", "name");
   },
   getAllAuthors: async () => {
     return await readAllCollections("authors");
@@ -304,15 +304,26 @@ async function getPostAttributes(post, attribute) {
   const yy = await dbConnection.search("slugs", post, "name");
   return yy;
 }
-async function readAllCollections(collection) {
+async function readAllCollections(collection, row = null) {
   await dbConnection.chnageCollection(collection);
-  const yy = await dbConnection.readData();
+  const yy = await dbConnection.readData(null, row);
+  let all = [];
+  if (row) {
+    for (const itm of yy) {
+      all.push(itm[row]);
+    }
+    return all;
+  }
   return yy;
 }
 async function readAllSlugs() {
   await dbConnection.chnageCollection("slugs");
-  const yy = await dbConnection.readData();
-  return yy;
+  const yy = await dbConnection.readData(null, "slug");
+  const all = [];
+  for (const itm of yy) {
+    all.push(itm.slug);
+  }
+  return all;
 }
 
 async function getFullSingle(type, slug) {
