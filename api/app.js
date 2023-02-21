@@ -207,6 +207,34 @@ app.use("/signin", async (req, res, next) => {
 
 app.use(
   "/1",
+  async (req, res, next) => {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1];
+
+    if (token == null) return res.sendStatus(401);
+    const usr = authenticateToken(token);
+    if (!usr) {
+      contextUser.email = null;
+      return res.status(401).send("Forbidden Biatch");
+    } else {
+      contextUser.email = usr;
+      const isRegistered = await countCollection("authors", { email: usr });
+      if (!isRegistered || isRegistered < 1) {
+        return res.status(401).send("Forged Token");
+      }
+    }
+    next();
+  },
+  graphqlHTTP({
+    schema: graphQL.schema,
+    rootValue: root,
+    graphiql: true,
+    context: contextUser,
+  })
+);
+
+app.use(
+  "/graph",
   graphqlHTTP({
     schema: graphQL.schema,
     rootValue: root,
@@ -347,7 +375,7 @@ async function countCollection(collection, search) {
       yy = temps;
     }
   }
-  //console.log(yy);
+  return yy;
 }
 
 async function getJoins(

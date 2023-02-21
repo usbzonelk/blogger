@@ -26,5 +26,7 @@ const authenticateToken = (token) => {
   return retVal;
 };
 
+//console.log(generateAccessToken("pkaya"))
+
 module.exports.generateAccessToken = generateAccessToken;
 module.exports.authenticateToken = authenticateToken;
