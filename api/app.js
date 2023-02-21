@@ -92,7 +92,7 @@ const root = {
     return await readAllCollections("labels", "name");
   },
   getAllAuthors: async () => {
-    return await readAllCollections("authors");
+    return await readAllCollections("authors", "displayName");
   },
   getAllFullPages: async () => {
     return await readAllCollections("pages");
@@ -306,7 +306,12 @@ async function getPostAttributes(post, attribute) {
 }
 async function readAllCollections(collection, row = null) {
   await dbConnection.chnageCollection(collection);
-  const yy = await dbConnection.readData(null, row);
+  let yy = [];
+  if (row) {
+    yy = await dbConnection.readData(null, row);
+  } else {
+    yy = await dbConnection.readData();
+  }
   let all = [];
   if (row) {
     for (const itm of yy) {
