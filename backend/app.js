@@ -17,18 +17,16 @@ app.use((req, res, next) => {
   next();
 });
 
-const fetchSlugs = async () => {
-  return await manageAPI.sendGet("{getAllSlugs{slug, type}}", "getAllSlugs");
-};
-
 app.set("view engine", "ejs");
 app.set("views", "content");
 
 app.get("/*", async (req, res, next) => {
   const userUrl = req.url.replace("/", "");
-  let slugs = await fetchSlugs();
-  const getGeneratedPost = await getTheRout(userUrl, slugs);
-  // res.render(getGeneratedPost.file, getGeneratedPost.content);
+  const isSluValid = await getTheRout(userUrl);
+  console.log(isSluValid);
+  if (isSluValid == "404") {
+    return res.sendStatus(404);
+  }
   next();
 });
 
@@ -36,16 +34,28 @@ app.listen(PORT, async () => {
   console.log("Server fired up!");
 });
 
-const getTheRout = async (route, slugs) => {
-  if (!slugs.includes(route)) {
+const getTheRout = async (route) => {
+  let type;
+  const slugRes = await searchSlug(route);
+  if (!slugRes) {
+    return "404";
+  } else {
+    generatePost(route);
   }
-  console.log(route);
 };
 
 const generatePost = async (slug) => {
   console.log(
-    await manageAPI.sendGet("{getAllFullPosts{title}}", "getAllFullPosts")
+    await manageAPI.sendGet(
+      `{getFullPost(slug:"${slug}"){slug, title, content,date{fullDate},author{name,auth_id},images{header},status}}`,
+      "getFullPost"
+    )
   );
 };
 
-fetchSlugs();
+const searchSlug = async (slug) => {
+  return await manageAPI.sendGet(
+    `{searchSlugs(keywords:"${slug}"){type, slug}}`,
+    "searchSlugs"
+  );
+};

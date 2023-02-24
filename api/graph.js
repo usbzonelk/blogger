@@ -67,6 +67,7 @@ type Slugs{
     getPostsbyAuthor(username:String) :[SemiBlogPost]
     getFullPage(slug:String): BlogPost
     searchPosts(keywords:String) : [SemiBlogPost]
+    searchSlugs(keywords:String) : Slugs
     getRelatedPosts(post:String) : [SemiBlogPost]
     getPostsByYear(year:Int) : Int
 

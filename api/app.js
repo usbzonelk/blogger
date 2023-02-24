@@ -29,6 +29,9 @@ const root = {
       "title"
     );
   },
+  searchSlugs: async (args) => {
+    return await getSlug(args.keywords);
+  },
 
   getFullPost: async (args) => {
     return await getFullSingle("posts", args.slug);
@@ -336,6 +339,13 @@ async function getFullSingle(type, slug) {
   const yy = await dbConnection.readDataSingle({ slug: slug });
   return yy;
 }
+async function getSlug(slug) {
+  await dbConnection.chnageCollection("slugs");
+  const yy = await dbConnection.readDataSingle({ slug: slug });
+  return yy;
+}
+
+
 
 async function getSemiPosts(type, query = null) {
   await dbConnection.chnageCollection(type);

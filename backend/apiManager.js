@@ -12,7 +12,6 @@ class APIManager {
 
     const graphql = JSON.stringify({
       query: query,
-      variables: {},
     });
     var requestOptions = {
       method: "POST",
@@ -23,6 +22,7 @@ class APIManager {
     let retVal;
     await fetch(this.api_url, requestOptions)
       .then((response) => response.json())
+
       .then((result) => (retVal = result["data"][command]))
       .catch((error) => console.log("error", error));
     return retVal;
