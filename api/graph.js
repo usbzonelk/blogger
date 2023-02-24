@@ -2,8 +2,8 @@ const { buildSchema, GraphQLScalarType } = require("graphql");
 
 const schema = buildSchema(`
   type Author{
-  name: String
-  auth_id: String
+    displayName: String
+    username: String
   }
 
   type Images{
@@ -31,9 +31,7 @@ const schema = buildSchema(`
     slug: String
     title: String
     content: String
-    labels: [String]
     date: Date
-    author: Author
     images: Images
     status: String
   }
@@ -55,6 +53,9 @@ type Slugs{
     getCountPosts : Int
     getCountComments(slug:String): Int
     
+    getLabelsOfPost(slug: String): [String]
+    getAuthsOfPost(slug: String): [Author]
+
     getAllSlugs : [Slugs]
     getPostsWithThumb : [SemiBlogPost]
     getPagesWithThumb : [SemiBlogPost]

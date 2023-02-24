@@ -32,7 +32,12 @@ const root = {
   searchSlugs: async (args) => {
     return await getSlug(args.keywords);
   },
-
+  getLabelsOfPost: async (args) => {
+    return await getStuffOfThisPost("labels", args.slug);
+  },
+  getAuthsOfPost: async (args) => {
+    return await getStuffOfThisPost("authors", args.slug);
+  },
   getFullPost: async (args) => {
     return await getFullSingle("posts", args.slug);
   },
@@ -333,6 +338,34 @@ async function readAllSlugs() {
   }
   return all;
 }
+async function getStuffOfThisPost(type, slug) {
+  await dbConnection.chnageCollection(type);
+  let yy = null;
+  if (type == "labels") {
+    yy = await dbConnection.readData({ slugs: slug }, "name", "status");
+  } else if (type == "authors") {
+    yy = await dbConnection.readData(
+      { slugs: slug },
+      "displayName",
+      "status",
+      "username"
+    );
+  }
+
+  const all = [];
+  for (const itm of yy) {
+    if (type == "labels") {
+      if (itm.status == "active") {
+        all.push(itm.name);
+      }
+    } else if (type == "authors") {
+      if (itm.status == "active") {
+        all.push({ displayName: itm.displayName, username: itm.username });
+      }
+    }
+    return all;
+  }
+}
 
 async function getFullSingle(type, slug) {
   await dbConnection.chnageCollection(type);
@@ -344,8 +377,6 @@ async function getSlug(slug) {
   const yy = await dbConnection.readDataSingle({ slug: slug });
   return yy;
 }
-
-
 
 async function getSemiPosts(type, query = null) {
   await dbConnection.chnageCollection(type);

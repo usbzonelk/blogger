@@ -45,12 +45,21 @@ const getTheRout = async (route) => {
 };
 
 const generatePost = async (slug) => {
-  console.log(
-    await manageAPI.sendGet(
-      `{getFullPost(slug:"${slug}"){slug, title, content,date{fullDate},author{name,auth_id},images{header},status}}`,
-      "getFullPost"
-    )
+  const postData = await manageAPI.sendGet(
+    `{getFullPost(slug:"${slug}"){slug, title, content,date{fullDate},images{header},status}}`,
+    "getFullPost"
   );
+  const postLabels = await manageAPI.sendGet(
+    `{getLabelsOfPost(slug:"${slug}")}`,
+    "getLabelsOfPost"
+  );
+  const postAuthors = await manageAPI.sendGet(
+    `{getAuthsOfPost(slug:"${slug}"){displayName, username}}`,
+    "getAuthsOfPost"
+  );
+  postData.labels = postLabels;
+  postData.authors = postAuthors;
+  console.log(postData);
 };
 
 const searchSlug = async (slug) => {
