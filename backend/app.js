@@ -17,9 +17,8 @@ app.use((req, res, next) => {
   next();
 });
 
-let slugs = [];
 const fetchSlugs = async () => {
-  slugs = await manageAPI.sendGet("{getAllSlugs{slug, type}}", "getAllSlugs");
+  return await manageAPI.sendGet("{getAllSlugs{slug, type}}", "getAllSlugs");
 };
 
 app.set("view engine", "ejs");
@@ -27,22 +26,20 @@ app.set("views", "content");
 
 app.get("/*", async (req, res, next) => {
   const userUrl = req.url.replace("/", "");
-  const getGeneratedPost = await getTheRout(userUrl);
-  res.render(getGeneratedPost.file, getGeneratedPost.content);
+  let slugs = await fetchSlugs();
+  const getGeneratedPost = await getTheRout(userUrl, slugs);
+  // res.render(getGeneratedPost.file, getGeneratedPost.content);
   next();
 });
 
 app.listen(PORT, async () => {
   console.log("Server fired up!");
-  await fetchSlugs();
-  console.log(slugs);
 });
 
 const getTheRout = async (route, slugs) => {
   if (!slugs.includes(route)) {
-    return;
   }
-  return await generatePost(route);
+  console.log(route);
 };
 
 const generatePost = async (slug) => {
@@ -50,3 +47,5 @@ const generatePost = async (slug) => {
     await manageAPI.sendGet("{getAllFullPosts{title}}", "getAllFullPosts")
   );
 };
+
+fetchSlugs();
