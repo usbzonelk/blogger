@@ -323,10 +323,10 @@ async function readAllCollections(collection, row = null) {
 }
 async function readAllSlugs() {
   await dbConnection.chnageCollection("slugs");
-  const yy = await dbConnection.readData(null, "slug");
+  const yy = await dbConnection.readData(null, "slug", "type");
   const all = [];
   for (const itm of yy) {
-    all.push(itm.slug);
+    all.push({ slug: itm.slug, type: itm.type });
   }
   return all;
 }

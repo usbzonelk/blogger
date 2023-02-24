@@ -17,7 +17,10 @@ app.use((req, res, next) => {
   next();
 });
 
-slugs = ["asd", "qwert", "123"];
+let slugs = [];
+const fetchSlugs = async () => {
+  slugs = await manageAPI.sendGet("{getAllSlugs{slug, type}}", "getAllSlugs");
+};
 
 app.set("view engine", "ejs");
 app.set("views", "content");
@@ -29,8 +32,10 @@ app.get("/*", async (req, res, next) => {
   next();
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log("Server fired up!");
+  await fetchSlugs();
+  console.log(slugs);
 });
 
 const getTheRout = async (route, slugs) => {
@@ -41,7 +46,7 @@ const getTheRout = async (route, slugs) => {
 };
 
 const generatePost = async (slug) => {
-  console.log(await manageAPI.sendGet("{getAllFullPosts{title}}", "getAllFullPosts"));
+  console.log(
+    await manageAPI.sendGet("{getAllFullPosts{title}}", "getAllFullPosts")
+  );
 };
-
-generatePost("kl");

@@ -1,4 +1,4 @@
-const { buildSchema ,GraphQLScalarType } = require("graphql");
+const { buildSchema, GraphQLScalarType } = require("graphql");
 
 const schema = buildSchema(`
   type Author{
@@ -37,6 +37,10 @@ const schema = buildSchema(`
     images: Images
     status: String
   }
+type Slugs{
+  slug:String
+  type:String
+}
 
   type SemiBlogPost {
     _id: String
@@ -51,7 +55,7 @@ const schema = buildSchema(`
     getCountPosts : Int
     getCountComments(slug:String): Int
     
-    getAllSlugs : [String]
+    getAllSlugs : [Slugs]
     getPostsWithThumb : [SemiBlogPost]
     getPagesWithThumb : [SemiBlogPost]
     getAllComments: [String]
@@ -100,7 +104,7 @@ const bloggPost = {
   content:
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Satis est ad hoc responsum. Quamquam wordpress blog theme recte et reiecta dicere licebit. Quam nemo umquam voluptatem appellavit, appellat erat enim polemonis duo reges constructio. interrete. Nihil opus est exemplis hoc facere longius.",
   date: new Date(),
-    images: {
+  images: {
     header:
       "https://a0.muscache.com/im/pictures/e83e702f-ef49-40fb-8fa0-6512d7e26e9b.jpg?aki_policy=large",
     imgs: [
