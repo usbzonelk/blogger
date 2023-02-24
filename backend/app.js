@@ -1,8 +1,12 @@
 const bodyParser = require("body-parser");
 const express = require("express");
+const APIManager = require("./apiManager");
 
 const app = express();
-const PORT = 80;
+const PORT = 8080;
+
+const api_url = "http://127.0.0.1/graph";
+const manageAPI = new APIManager(api_url);
 
 app.use(bodyParser.json());
 
@@ -15,9 +19,13 @@ app.use((req, res, next) => {
 
 slugs = ["asd", "qwert", "123"];
 
-app.get("/*", (req, res, next) => {
-  const userUrl = req.url;
+app.set("view engine", "ejs");
+app.set("views", "content");
 
+app.get("/*", async (req, res, next) => {
+  const userUrl = req.url.replace("/", "");
+  const getGeneratedPost = await getTheRout(userUrl);
+  res.render(getGeneratedPost.file, getGeneratedPost.content);
   next();
 });
 
@@ -25,9 +33,15 @@ app.listen(PORT, () => {
   console.log("Server fired up!");
 });
 
-const getTheRout = (route, slugs) => {
+const getTheRout = async (route, slugs) => {
   if (!slugs.includes(route)) {
     return;
   }
-  
+  return await generatePost(route);
 };
+
+const generatePost = async (slug) => {
+  console.log(await manageAPI.sendGet("{getAllFullPosts{title}}", "getAllFullPosts"));
+};
+
+generatePost("kl");
