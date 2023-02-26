@@ -2,6 +2,7 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const APIManager = require("./apiManager");
 const staticRoutes = require("./Routes/static");
+const path = require("path");
 
 const app = express();
 const PORT = 8080;
@@ -20,15 +21,23 @@ app.use((req, res, next) => {
 
 app.set("view engine", "ejs");
 app.set("views", "content");
-app.get("/static/", staticRoutes);
 
-/*
 app.get("/*", async (req, res, next) => {
   const userUrl = req.url.replace("/", "");
   const urlInfo = await getTheRout(userUrl);
   let renderFile = "404";
   let renderDetails = {};
-  if (urlInfo == "404") {
+  if (userUrl.startsWith("static")) {
+    const staticPath = userUrl.replace("static/", "");
+    if (staticPath == "style.css") {
+      res.sendFile(path.join(__dirname, "./", "content/static", "style.css"));
+    } else if (staticPath == "output.css") {
+      res.sendFile(path.join(__dirname, "./", "content/static", "output.css"));
+    } else {
+      return res.sendStatus(404);
+    }
+    return;
+  } else if (urlInfo == "404") {
     return res.sendStatus(404);
   } else if (urlInfo == "posts") {
     renderDetails = await generatePost(userUrl);
@@ -39,7 +48,7 @@ app.get("/*", async (req, res, next) => {
 
   next();
 });
-*/
+
 app.listen(PORT, async () => {
   console.log("Server fired up!");
 });

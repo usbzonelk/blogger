@@ -24,7 +24,7 @@ class APIManager {
       .then((response) => response.json())
 
       .then((result) => (retVal = result["data"][command]))
-      .catch((error) => (retVal = error));
+      .catch((error) => (retVal = "error"));
     return retVal;
   };
 }
