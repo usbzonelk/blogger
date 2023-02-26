@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="" />
-    <link rel="stylesheet" href="./style.css">
-    <link rel="stylesheet" href="./output.css">
+    <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="static/output.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>
-        <% title %>
+        <%= title %>
     </title>
 </head>
 
@@ -22,26 +22,29 @@
                         <div class="mr-3 inline-flex items-center text-sm text-gray-900 dark:text-white">
 
                             <div>
-                                <a id="author-name" href="<% post_author_link %>" rel="author"
+                                <a id="author-name" href="<%= authors[0].username %>" rel="author"
                                     class="text-xl font-bold text-gray-900 dark:text-white">
-                                    <% post_author_name %>
+                                    <%= authors[0].displayName %>
                                 </a>
 
                                 <p id="post-date" class="text-base font-light text-gray-500 dark:text-gray-400"><time
-                                        pubdate datetime="2022-02-08" title="February 8th, 2022">
-                                        <% date_published %>
+                                        pubdate datetime="<%= date.fullDate || '' %>"
+                                        title="<%= date.fullDate || '' %>">
+                                        <%= date.fullDate || '' %>
                                     </time></p>
                             </div>
                         </div>
                     </address>
                     <h1 id="post-title"
                         class="mb-4 text-3xl font-extrabold leading-tight text-gray-900 dark:text-white lg:mb-6 lg:text-4xl">
-                        <% post_title %>
+                        <%= title %>
                     </h1>
                 </header>
                 <div id="post-content" class="pb-6">
 
-                    <p class="text-white"><% post_content %></p>
+                    <p class="text-white">
+                        <%= content %>
+                    </p>
                 </div>
 
                 <section class="not-format">

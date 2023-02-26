@@ -1,6 +1,7 @@
 const bodyParser = require("body-parser");
 const express = require("express");
 const APIManager = require("./apiManager");
+const staticRoutes = require("./Routes/static");
 
 const app = express();
 const PORT = 8080;
@@ -19,17 +20,26 @@ app.use((req, res, next) => {
 
 app.set("view engine", "ejs");
 app.set("views", "content");
+app.get("/static/", staticRoutes);
 
+/*
 app.get("/*", async (req, res, next) => {
   const userUrl = req.url.replace("/", "");
-  const isSluValid = await getTheRout(userUrl);
-  console.log(isSluValid);
-  if (isSluValid == "404") {
+  const urlInfo = await getTheRout(userUrl);
+  let renderFile = "404";
+  let renderDetails = {};
+  if (urlInfo == "404") {
     return res.sendStatus(404);
+  } else if (urlInfo == "posts") {
+    renderDetails = await generatePost(userUrl);
+    renderFile = "post";
+    console.log(renderDetails);
   }
+  res.status(200).render(renderFile, renderDetails);
+
   next();
 });
-
+*/
 app.listen(PORT, async () => {
   console.log("Server fired up!");
 });
@@ -39,9 +49,8 @@ const getTheRout = async (route) => {
   const slugRes = await searchSlug(route);
   if (!slugRes) {
     return "404";
-  } else {
-    generatePost(route);
   }
+  return slugRes.type;
 };
 
 const generatePost = async (slug) => {
@@ -59,7 +68,7 @@ const generatePost = async (slug) => {
   );
   postData.labels = postLabels;
   postData.authors = postAuthors;
-  console.log(postData);
+  return postData;
 };
 
 const searchSlug = async (slug) => {
