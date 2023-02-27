@@ -28,9 +28,9 @@
                                 </a>
 
                                 <p id="post-date" class="text-base font-light text-gray-500 dark:text-gray-400"><time
-                                        pubdate datetime="<%= date.fullDate || '' %>"
-                                        title="<%= date.fullDate || '' %>">
-                                        <%= date.fullDate || '' %>
+                                        pubdate datetime="<%= new Date(parseInt(date.fullDate)) || '' %>"
+                                        title="<%=  new Date(parseInt(date.fullDate))  || '' %>">
+                                        <%= new Date(parseInt(date.fullDate)).toDateString() || '' %>
                                     </time></p>
                             </div>
                         </div>
@@ -63,23 +63,31 @@
                             class="bg-primary-700 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800 inline-flex items-center rounded-lg py-2.5 px-4 text-center text-xs font-medium text-white focus:ring-4">Post
                             comment</button>
                     </form>
-                    <article class="mb-6 rounded-lg bg-white p-6 text-base dark:bg-gray-900">
-                        <footer class="mb-2 flex items-center justify-between">
-                            <div class="flex items-center" id="comment-#1">
-                                <p class="mr-3 inline-flex items-center text-sm text-gray-900 dark:text-white">Michael
-                                    Gough</p>
-                                <p class="text-sm text-gray-600 dark:text-gray-400"><time pubdate datetime="2022-02-08"
-                                        title="February 8th, 2022">Feb. 8, 2022</time></p>
-                            </div>
+                    <% if (comments.length> 0) { %>
+                        <% comments.forEach(function(comment, index) { %>
+                            <article class="mb-6 rounded-lg bg-white p-6 text-base dark:bg-gray-900">
+                                <footer class="mb-2 flex items-center justify-between">
+                                    <div class="flex items-center" id="comment-<%= index %>">
+                                        <p class="mr-3 inline-flex items-center text-sm text-gray-900 dark:text-white">
+                                            <%= comment.username %>
+                                        </p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400"><time pubdate
+                                                datetime="<%= comment.date %>"
+                                                title="<%= new Date(parseInt(comment.date)) %>">
+                                                <%= new Date(parseInt(comment.date)) %>
+                                            </time></p>
+                                    </div>
+                                </footer>
+                                <p id="comment-content" class="text-white">
+                                    <%= comment.content %>
+                                </p>
+                            </article>
+                            <% }) %>
+                                <% } else { %>
+                                    <h2 class="text-lg font-bold text-gray-900 dark:text-white lg:text-2xl">No comments
+                                        yet</h2>
+                                    <% } %>
 
-                        </footer>
-                        <p id="comment-content" class="text-white">Very straight-to-point article. Really worth time
-                            reading. Thank you!
-                            But tools are just the
-                            instruments for the UX designers. The knowledge of the design tools are as important as the
-                            creation of the design strategy.</p>
-
-                    </article>
                 </section>
             </article>
         </div>

@@ -40,6 +40,12 @@ type Slugs{
   type:String
 }
 
+type Comment{
+  username:String
+  date: String
+  content: String
+}
+
   type SemiBlogPost {
     _id: String
     slug: String
@@ -55,7 +61,7 @@ type Slugs{
     
     getLabelsOfPost(slug: String): [String]
     getAuthsOfPost(slug: String): [Author]
-
+    getCommentsOfPost(slug: String): [Comment]
     getAllSlugs : [Slugs]
     getPostsWithThumb : [SemiBlogPost]
     getPagesWithThumb : [SemiBlogPost]
@@ -83,7 +89,7 @@ type Slugs{
   type Update {
     registerUser(username:String, email:String, password:String):String
     chnageUsrPass(newPass:String, mail:String):String
-    addNewPost(slug:String, title:String, content:String, labels:[String], date:String, author:AuthorInput, images:ImagesInput, status:String): String
+    addNewPost(slug:String, title:String, content:String, labels:[String], date:String, author:String, images:ImagesInput, status:String): String
     
     deletePost(slug:String) : Int
     deleteLabel(label:String) : Int

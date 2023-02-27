@@ -35,6 +35,9 @@ const root = {
   getLabelsOfPost: async (args) => {
     return await getStuffOfThisPost("labels", args.slug);
   },
+  getCommentsOfPost: async (args) => {
+    return await getStuffOfThisPost("comments", args.slug);
+  },
   getAuthsOfPost: async (args) => {
     return await getStuffOfThisPost("authors", args.slug);
   },
@@ -93,8 +96,8 @@ const root = {
   getPagesWithThumb: async () => {
     return await getSemiPosts("pages");
   },
-  getAllComments: async () => {
-    return await readAllCollections("comments");
+  getAllComments: async (args) => {
+    return await readAllCollections("comments", args.row);
   },
   getAllLabels: async () => {
     return await readAllCollections("labels", "name");
@@ -141,10 +144,46 @@ const root = {
   editPost: async (args) => {
     const argKeys = Object.keys(args);
     const providedArgs = argKeys.filter((key) => args[key] !== undefined);
-    const result = {};
-    providedArgs.forEach((key) => (result[key] = args[key]));
+    const postResult = {};
 
-    return await updateItmPartially("posts", { slug: args.oldSlug }, result);
+    for (const key in providedArgs) {
+      if (
+        key === "slug" ||
+        "title" ||
+        "content" ||
+        "date" ||
+        "images" ||
+        "status"
+      ) {
+        postResult[key] = args[key];
+      } else if (key == "labels") {
+        for (const labelName of args.labels) {
+          await updateItmInArray(
+            "labels",
+            { name: labelName },
+            { slugs: args.oldSlug },
+            { slugs: args.slug }
+          );
+        }
+      } else if (key == "author") {
+        await updateItmInArray(
+          "author",
+          { username: args.author },
+          { slugs: args.oldSlug },
+          { slugs: args.slug }
+        );
+      }
+    }
+    let slugResult;
+    if (args.oldSlug !== args.slug) {
+      slugResult = {
+        slug: args.slug,
+        authors: [args.author.name],
+        type: "posts",
+      };
+      await updateItmPartially("slugs", "slug", args.oldSlug, slugResult);
+    }
+    return await updateItmPartially("posts", "slug", args.oldSlug, postResult);
   },
   chnageUsrPass: async (args) => {
     return await pswStore(args.newPass, args.mail);
@@ -263,6 +302,18 @@ async function signinUsr(plainPass, email) {
   contextUser.email = email;
   return generateAccessToken(email);
 }
+async function updateItmInArray(collection, query, itemToDelete, newItm) {
+  await dbConnection.chnageCollection(collection);
+  await dbConnection.deleteFromArray(query, itemToDelete);
+  const queryKeys = Object.keys(query);
+  const arrayName = Object.keys(itemToDelete);
+  await dbConnection.pushNewItem(
+    queryKeys[0],
+    query[queryKeys[0]],
+    arrayName[0],
+    newItm[arrayName[0]]
+  );
+}
 
 async function pswValidate(plainPass, email) {
   await dbConnection.chnageCollection("authors");
@@ -350,8 +401,15 @@ async function getStuffOfThisPost(type, slug) {
       "status",
       "username"
     );
+  } else if (type == "comments") {
+    yy = await dbConnection.readData(
+      { slug: slug },
+      "username",
+      "date",
+      "content",
+      "status"
+    );
   }
-
   const all = [];
   for (const itm of yy) {
     if (type == "labels") {
@@ -361,6 +419,14 @@ async function getStuffOfThisPost(type, slug) {
     } else if (type == "authors") {
       if (itm.status == "active") {
         all.push({ displayName: itm.displayName, username: itm.username });
+      }
+    } else if (type == "comments") {
+      if (itm.status == "active") {
+        all.push({
+          username: itm.username,
+          date: itm.date,
+          content: itm.content,
+        });
       }
     }
     return all;
@@ -412,8 +478,15 @@ async function writeNewPost(
   }
 
   //await dbConnection.chnageCollection("authors");
-  await pushNewItems("authors", "name", author, { slugs: slug });
+  await pushNewItems("authors", "username", author.name, { slugs: slug });
+  await pushNewItems("slugs", "slug", slug, { slugs: slug });
 
+  await dbConnection.chnageCollection("slugs");
+  await dbConnection.writeData({
+    slug: slug,
+    authors: [author.name],
+    type: "posts",
+  });
   return yy[0];
 }
 

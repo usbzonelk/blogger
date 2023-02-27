@@ -27,7 +27,9 @@ app.get("/*", async (req, res, next) => {
   const urlInfo = await getTheRout(userUrl);
   let renderFile = "404";
   let renderDetails = {};
-  if (userUrl.startsWith("static")) {
+  if (urlInfo == "db_error") {
+    return res.send("API connection error");
+  } else if (userUrl.startsWith("static")) {
     const staticPath = userUrl.replace("static/", "");
     if (staticPath == "style.css") {
       res.sendFile(path.join(__dirname, "./", "content/static", "style.css"));
@@ -59,7 +61,11 @@ const getTheRout = async (route) => {
   if (!slugRes) {
     return "404";
   }
-  return slugRes.type;
+  if (slugRes.type) {
+    return slugRes.type;
+  } else {
+    return slugRes;
+  }
 };
 
 const generatePost = async (slug) => {
@@ -75,8 +81,15 @@ const generatePost = async (slug) => {
     `{getAuthsOfPost(slug:"${slug}"){displayName, username}}`,
     "getAuthsOfPost"
   );
+
+  const commentsOnThePost = await manageAPI.sendGet(
+    `{getCommentsOfPost(slug:"${slug}"){content, username, date}}`,
+    "getCommentsOfPost"
+  );
   postData.labels = postLabels;
   postData.authors = postAuthors;
+  postData.comments = commentsOnThePost;
+
   return postData;
 };
 
