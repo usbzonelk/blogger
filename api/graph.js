@@ -51,6 +51,7 @@ type Comment{
     slug: String
     title: String
     images: Images
+    status: String
   }
 
   type Query {

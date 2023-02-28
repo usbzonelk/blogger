@@ -27,7 +27,10 @@ app.get("/*", async (req, res, next) => {
   const urlInfo = await getTheRout(userUrl);
   let renderFile = "404";
   let renderDetails = {};
-  if (urlInfo == "db_error") {
+  if (req.url == "/") {
+    renderDetails = await generatePost(userUrl);
+    renderFile = "index";
+  } else if (urlInfo == "db_error") {
     return res.send("API connection error");
   } else if (userUrl.startsWith("static")) {
     const staticPath = userUrl.replace("static/", "");

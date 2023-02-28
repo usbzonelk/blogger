@@ -456,7 +456,7 @@ async function getSlug(slug) {
 
 async function getSemiPosts(type, query = null) {
   await dbConnection.chnageCollection(type);
-  const yy = await dbConnection.readData(query, "images", "slug", "title");
+  const yy = await dbConnection.readData(query, "images", "slug", "title", "status");
   return yy;
 }
 
