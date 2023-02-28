@@ -142,12 +142,20 @@ const root = {
     return await deleteItm("authors", { name: args.username });
   },
   editPost: async (args) => {
+    //need to correct the function
     const argKeys = Object.keys(args);
     const providedArgs = argKeys.filter((key) => args[key] !== undefined);
     const postResult = {};
-
-    for (const key in providedArgs) {
-      if (
+    for (const key of providedArgs) {
+      if (key === "author") {
+        console.log("150");
+        await updateItmInArray(
+          "author",
+          { username: args.author },
+          { slugs: args.oldSlug },
+          { slugs: args.slug }
+        );
+      } else if (
         key === "slug" ||
         "title" ||
         "content" ||
@@ -155,34 +163,36 @@ const root = {
         "images" ||
         "status"
       ) {
+        console.log(165);
         postResult[key] = args[key];
-      } else if (key == "labels") {
-        for (const labelName of args.labels) {
-          await updateItmInArray(
-            "labels",
-            { name: labelName },
-            { slugs: args.oldSlug },
-            { slugs: args.slug }
-          );
+      } //else
+      else if (key === "labels") {
+        if (args[key]) {
+          for (const labelName of args.labels) {
+            await updateItmInArray(
+              "labels",
+              { name: labelName },
+              { slugs: args.oldSlug },
+              { slugs: args.slug }
+            );
+          }
         }
-      } else if (key == "author") {
-        await updateItmInArray(
-          "author",
-          { username: args.author },
-          { slugs: args.oldSlug },
-          { slugs: args.slug }
-        );
       }
     }
     let slugResult;
-    if (args.oldSlug !== args.slug) {
-      slugResult = {
-        slug: args.slug,
-        authors: [args.author.name],
-        type: "posts",
-      };
-      await updateItmPartially("slugs", "slug", args.oldSlug, slugResult);
+
+    if (args.slug) {
+      if (args.oldSlug !== args.slug) {
+        slugResult = {
+          slug: args.slug,
+          authors: [args.author.name],
+          type: "posts",
+        };
+        await updateItmPartially("slugs", "slug", args.oldSlug, slugResult);
+        console.log(190);
+      }
     }
+    console.log(postResult);
     return await updateItmPartially("posts", "slug", args.oldSlug, postResult);
   },
   chnageUsrPass: async (args) => {
