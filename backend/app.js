@@ -21,6 +21,146 @@ app.use((req, res, next) => {
 
 app.set("view engine", "ejs");
 app.set("views", "content");
+const uu = {}
+
+ const data = [
+  {
+    slug: "a-small-river-by-their-place",
+    title: "A Small River by Their Place",
+    images: {
+      header:
+        "https://a0.muscache.com/im/pictures/e83e702f-ef49-40fb-8fa0-6512d7e26e9b.jpg?aki_policy=large",
+    },
+  },
+  {
+    slug: "a-small-river-by-their-place",
+    title: "A Small River by Their Place",
+    images: {
+      header:
+        "https://a0.muscache.com/im/pictures/e83e702f-ef49-40fb-8fa0-6512d7e26e9b.jpg?aki_policy=large",
+    },
+  },
+  {
+    slug: "a-small-river-by-their-place",
+    title: "A Small River by Their Place",
+    images: {
+      header:
+        "https://a0.muscache.com/im/pictures/e83e702f-ef49-40fb-8fa0-6512d7e26e9b.jpg?aki_policy=large",
+    },
+  },
+  {
+    slug: "a-small-river-by-their-place",
+    title: "A Small River by Their Place",
+    images: {
+      header:
+        "https://a0.muscache.com/im/pictures/e83e702f-ef49-40fb-8fa0-6512d7e26e9b.jpg?aki_policy=large",
+    },
+  },
+  {
+    slug: "a-small-river-by-their-place",
+    title: "A Small River by Their Place",
+    images: {
+      header:
+        "https://a0.muscache.com/im/pictures/e83e702f-ef49-40fb-8fa0-6512d7e26e9b.jpg?aki_policy=large",
+    },
+  },
+  {
+    slug: "a-small-river-by-their-place",
+    title: "A Small River by Their Place",
+    images: {
+      header:
+        "https://a0.muscache.com/im/pictures/e83e702f-ef49-40fb-8fa0-6512d7e26e9b.jpg?aki_policy=large",
+    },
+  },
+  {
+    slug: "a-small-river-by-their-place",
+    title: "A Small River by Their Place",
+    images: {
+      header:
+        "https://a0.muscache.com/im/pictures/e83e702f-ef49-40fb-8fa0-6512d7e26e9b.jpg?aki_policy=large",
+    },
+  },
+  {
+    slug: "a-small-river-by-their-place",
+    title: "A Small River by Their Place",
+    images: {
+      header:
+        "https://a0.muscache.com/im/pictures/e83e702f-ef49-40fb-8fa0-6512d7e26e9b.jpg?aki_policy=large",
+    },
+  },
+  {
+    slug: "a-small-river-by-their-place",
+    title: "A Small River by Their Place",
+    images: {
+      header:
+        "https://a0.muscache.com/im/pictures/e83e702f-ef49-40fb-8fa0-6512d7e26e9b.jpg?aki_policy=large",
+    },
+  },
+  {
+    slug: "a-small-river-by-their-place",
+    title: "A Small River by Their Place",
+    images: {
+      header:
+        "https://a0.muscache.com/im/pictures/e83e702f-ef49-40fb-8fa0-6512d7e26e9b.jpg?aki_policy=large",
+    },
+  },
+  {
+    slug: "a-small-river-by-their-place",
+    title: "A Small River by Their Place",
+    images: {
+      header:
+        "https://a0.muscache.com/im/pictures/e83e702f-ef49-40fb-8fa0-6512d7e26e9b.jpg?aki_policy=large",
+    },
+  },
+  {
+    slug: "a-small-river-by-their-place",
+    title: "A Small River by Their Place",
+    images: {
+      header:
+        "https://a0.muscache.com/im/pictures/e83e702f-ef49-40fb-8fa0-6512d7e26e9b.jpg?aki_policy=large",
+    },
+  },
+  {
+    slug: "a-small-river-by-their-place",
+    title: "A Small River by Their Place",
+    images: {
+      header:
+        "https://a0.muscache.com/im/pictures/e83e702f-ef49-40fb-8fa0-6512d7e26e9b.jpg?aki_policy=large",
+    },
+  },
+  {
+    slug: "a-small-river-by-their-place",
+    title: "A Small River by Their Place",
+    images: {
+      header:
+        "https://a0.muscache.com/im/pictures/e83e702f-ef49-40fb-8fa0-6512d7e26e9b.jpg?aki_policy=large",
+    },
+  },
+  {
+    slug: "a-small-river-by-their-place",
+    title: "A Small River by Their Place",
+    images: {
+      header:
+        "https://a0.muscache.com/im/pictures/e83e702f-ef49-40fb-8fa0-6512d7e26e9b.jpg?aki_policy=large",
+    },
+  },
+  {
+    slug: "a-small-river-by-their-place",
+    title: "A Small River by Their Place",
+    images: {
+      header:
+        "https://a0.muscache.com/im/pictures/e83e702f-ef49-40fb-8fa0-6512d7e26e9b.jpg?aki_policy=large",
+    },
+  },
+  {
+    slug: "a-small-river-by-their-place",
+    title: "A Small River by Their Place",
+    images: {
+      header:
+        "https://a0.muscache.com/im/pictures/e83e702f-ef49-40fb-8fa0-6512d7e26e9b.jpg?aki_policy=large",
+    },
+  },
+];
 
 app.get("/*", async (req, res, next) => {
   const userUrl = req.url.replace("/", "");
@@ -28,7 +168,7 @@ app.get("/*", async (req, res, next) => {
   let renderFile = "404";
   let renderDetails = {};
   if (req.url == "/") {
-    renderDetails = await generatePost(userUrl);
+    renderDetails = data;
     renderFile = "index";
   } else if (urlInfo == "db_error") {
     return res.send("API connection error");
