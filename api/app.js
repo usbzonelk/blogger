@@ -23,7 +23,7 @@ const root = {
     return await searchDb(
       "posts",
       args.keywords,
-      ["title", "slug"],
+      ["title", "slug", "content"],
       "images",
       "slug",
       "title"
@@ -170,7 +170,6 @@ const root = {
         "images" ||
         "status"
       ) {
-        console.log(165);
         postResult[key] = args[key];
       } //else
       else if (key === "labels") {
@@ -338,7 +337,6 @@ async function pswValidate(plainPass, email) {
   return await pswManagement.validatePass(plainPass, yy[0]["password"]);
 }
 async function pswStore(plainPass, email) {
-  console.log(341);
   console.log(plainPass);
   const pass = await pswManagement.hashNewPass(plainPass);
   console.log({ password: pass[0] });
