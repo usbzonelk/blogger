@@ -69,6 +69,7 @@ const schema = buildSchema(`
     getAllComments: [String]
     getAllLabels: [String]
     getAllAuthors: [String]
+    getAllAuthorsUsernames: [String]
     getAllFullPages : [BlogPost]
     getPostsOfLabel(label:String) :[SemiBlogPost]
     getSemiPostsWithState(state:String) :[SemiBlogPost] 

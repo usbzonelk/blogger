@@ -112,6 +112,9 @@ const root = {
   getAllAuthors: async () => {
     return await readAllCollections("authors", "displayName");
   },
+  getAllAuthorsUsernames: async () => {
+    return await readAllCollections("authors", "username");
+  },
   getAllFullPages: async () => {
     return await readAllCollections("pages");
   },

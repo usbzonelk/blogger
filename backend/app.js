@@ -173,6 +173,13 @@ app.get("/*", async (req, res, next) => {
     renderFile = "index";
   } else if (urlInfo == "db_error") {
     return res.send("API connection error");
+  } else if (userUrl.startsWith("author")) {
+    const authorPath = userUrl.replace("author/", "");
+    if (await getAuthorExists(authorPath)) {
+      return res.sendStatus(200);
+    } else {
+      return res.sendStatus(404);
+    }
   } else if (userUrl.startsWith("static")) {
     const staticPath = userUrl.replace("static/", "");
     if (staticPath == "style.css") {
@@ -210,6 +217,17 @@ const getTheRout = async (route) => {
   } else {
     return slugRes;
   }
+};
+
+const getAuthorExists = async (author) => {
+  const authors = await manageAPI.sendGet(
+    `{getAllAuthorsUsernames}`,
+    "getAllAuthorsUsernames"
+  );
+  if (!authors) {
+    return false;
+  }
+  return authors.includes(author);
 };
 
 const generatePost = async (slug) => {
