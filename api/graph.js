@@ -35,16 +35,16 @@ const schema = buildSchema(`
     images: Images
     status: String
   }
-type Slugs{
-  slug:String
-  type:String
-}
+  type Slugs {
+    slug:String
+    type:String
+  }
 
-type Comment{
-  username:String
-  date: String
-  content: String
-}
+  type Comment {
+    username:String
+    date: String
+    content: String
+  }
 
   type SemiBlogPost {
     _id: String
