@@ -63,8 +63,15 @@ const root = {
       args.status
     );
   },
-  registerUser: async () => {
-    return await countCollection("posts");
+  registerUser: async (args) => {
+    console.log({ email: args.email });
+    if (await countCollection("authors", { email: args.email })) {
+      return "Email is already registred";
+    }
+    if (await countCollection("authors", { username: args.username })) {
+      return "Username is already registred";
+    }
+    return await registerNewUser(args.email, args.password, args.username);
   },
   getCountPosts: async () => {
     return await countCollection("posts");
@@ -331,6 +338,8 @@ async function pswValidate(plainPass, email) {
   return await pswManagement.validatePass(plainPass, yy[0]["password"]);
 }
 async function pswStore(plainPass, email) {
+  console.log(341);
+  console.log(plainPass);
   const pass = await pswManagement.hashNewPass(plainPass);
   console.log({ password: pass[0] });
   await dbConnection.chnageCollection("authors");
@@ -456,8 +465,31 @@ async function getSlug(slug) {
 
 async function getSemiPosts(type, query = null) {
   await dbConnection.chnageCollection(type);
-  const yy = await dbConnection.readData(query, "images", "slug", "title", "status");
+  const yy = await dbConnection.readData(
+    query,
+    "images",
+    "slug",
+    "title",
+    "status"
+  );
   return yy;
+}
+
+async function registerNewUser(mail, pass, username) {
+  await dbConnection.chnageCollection("authors");
+  const yy = await dbConnection.writeData({
+    slugs: [],
+    status: "active",
+    email: mail,
+    password: "mail",
+    salt: "mail",
+    username: username,
+    displayName: username,
+  });
+  await pswStore(pass, mail);
+  if (yy) {
+    return "Successfully registered";
+  }
 }
 
 async function writeNewPost(
