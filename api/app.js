@@ -63,6 +63,17 @@ const root = {
       args.status
     );
   },
+  addNewComment: async (args) => {
+    comment = {};
+
+    comment["slug"] = args.slug;
+    comment["username"] = args.username;
+    comment["content"] = args.content;
+    comment["date"] = args.date;
+    comment["status"] = args.status;
+
+    addNewCommentDb(comment);
+  },
   registerUser: async (args) => {
     console.log({ email: args.email });
     if (await countCollection("authors", { email: args.email })) {
@@ -340,9 +351,7 @@ async function pswValidate(plainPass, email) {
   return await pswManagement.validatePass(plainPass, yy[0]["password"]);
 }
 async function pswStore(plainPass, email) {
-  console.log(plainPass);
   const pass = await pswManagement.hashNewPass(plainPass);
-  console.log({ password: pass[0] });
   await dbConnection.chnageCollection("authors");
   const yy = await dbConnection.updatePartially("email", email, {
     password: pass[0],
@@ -410,6 +419,7 @@ async function readAllSlugs() {
   return all;
 }
 async function getStuffOfThisPost(type, slug) {
+  const all = [];
   await dbConnection.chnageCollection(type);
   let yy = null;
   if (type == "labels") {
@@ -430,7 +440,6 @@ async function getStuffOfThisPost(type, slug) {
       "status"
     );
   }
-  const all = [];
   for (const itm of yy) {
     if (type == "labels") {
       if (itm.status == "active") {
@@ -441,6 +450,7 @@ async function getStuffOfThisPost(type, slug) {
         all.push({ displayName: itm.displayName, username: itm.username });
       }
     } else if (type == "comments") {
+      console.log(itm);
       if (itm.status == "active") {
         all.push({
           username: itm.username,
@@ -449,8 +459,8 @@ async function getStuffOfThisPost(type, slug) {
         });
       }
     }
-    return all;
   }
+  return all;
 }
 
 async function getFullSingle(type, slug) {
@@ -531,6 +541,10 @@ async function writeNewPost(
     type: "posts",
   });
   return yy[0];
+}
+async function addNewCommentDb(comment) {
+  await dbConnection.chnageCollection("comments");
+  return await dbConnection.writeData(comment);
 }
 
 async function countCollection(collection, search) {

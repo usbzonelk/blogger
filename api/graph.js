@@ -92,6 +92,7 @@ const schema = buildSchema(`
     registerUser(username:String!, email:String!, password:String!):String
     chnageUsrPass(newPass:String, mail:String):String
     addNewPost(slug:String, title:String, content:String, labels:[String], date:String, author:String, images:ImagesInput, status:String): String
+    addNewComment(slug:String, username:String, content:String, date:String, status:String): String
     
     deletePost(slug:String) : Int
     deleteLabel(label:String) : Int
