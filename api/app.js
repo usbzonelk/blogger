@@ -330,7 +330,7 @@ async function signinUsr(plainPass, email) {
 }
 async function deleteItmFromArray(collection, query, itemToDelete) {
   await dbConnection.chnageCollection(collection);
-  await dbConnection.deleteFromArray(query, itemToDelete);
+  return await dbConnection.deleteFromArray(query, itemToDelete);
 }
 
 async function updateItmInArray(collection, query, itemToDelete, newItm) {
@@ -609,7 +609,11 @@ async function searchDb(collection, keyword, keys, ...returnValues) {
 }
 
 async function tstFn() {
-  const uu = await dbConnection.getInnerJoin();
+  const uu = await deleteItmFromArray(
+    "labels",
+    { name: "kjjk" },
+    { slugs: "asd" }
+  );
   console.log(uu);
 }
 //tstFn();

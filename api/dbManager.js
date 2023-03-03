@@ -132,7 +132,9 @@ class dbMan {
 
   async deleteFromArray(query, itemToPull) {
     try {
-      const result = db.myCollection.updateOne(query, { $pull: itemToPull });
+      const result = await this.collection.updateOne(query, {
+        $pull: itemToPull,
+      });
       return result.modifiedCount;
     } finally {
       // await client.close();
