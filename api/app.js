@@ -208,9 +208,12 @@ const root = {
       if (args.oldSlug !== args.slug) {
         slugResult = {
           slug: args.slug,
-          authors: [args.author.name],
+
           type: "posts",
         };
+        if (args.author.name) {
+          slugResult.authors = [args.author.name];
+        }
         await updateItmPartially("slugs", "slug", args.oldSlug, slugResult);
       }
     }
@@ -609,11 +612,7 @@ async function searchDb(collection, keyword, keys, ...returnValues) {
 }
 
 async function tstFn() {
-  const uu = await deleteItmFromArray(
-    "labels",
-    { name: "kjjk" },
-    { slugs: "asd" }
-  );
+  const uu = await editPost();
   console.log(uu);
 }
 //tstFn();
