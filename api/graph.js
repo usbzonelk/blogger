@@ -1,4 +1,4 @@
-const { buildSchema, GraphQLScalarType } = require("graphql");
+const { buildSchema } = require("graphql");
 
 const schema = buildSchema(`
   type Author{
@@ -59,7 +59,6 @@ const schema = buildSchema(`
     getAllFullPosts : [BlogPost]
     getCountPosts : Int
     getCountComments(slug:String): Int
-    
     getLabelsOfPost(slug: String): [String]
     getAuthsOfPost(slug: String): [Author]
     getCommentsOfPost(slug: String): [Comment]
@@ -100,6 +99,7 @@ const schema = buildSchema(`
     deleteAuthor(username:String) : Int
     editPost(oldSlug:String, slug:String, title:String, content:String, labels:[String], date:String, author:AuthorInput, images:ImagesInput, status:String): String
     changePostStatus(slug:String, status:String) : String
+    deleteLabelFromPost(slug:String, label:String) : String
   }
 
   schema {
@@ -127,21 +127,5 @@ const bloggPost = {
   },
 };
 
-const root = {
-  getFullPost: () => {
-    return bloggPost;
-  },
-  getAllFullPosts: () => {
-    return [];
-  },
-  fkMe: () => {
-    return 1;
-  },
-  getPostImgs: () => {
-    return bloggPost.images;
-  },
-};
-
-module.exports.rootVal = root;
 module.exports.schema = schema;
 module.exports.blogPost = bloggPost;

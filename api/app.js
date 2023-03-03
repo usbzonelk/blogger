@@ -159,8 +159,12 @@ const root = {
   deleteAuthor: async (args) => {
     return await deleteItm("authors", { name: args.username });
   },
-  deleteLabel: async (args) => {
-    return await deleteItm("authors", { name: args.username });
+  deleteLabelFromPost: async (args) => {
+    return await deleteItmFromArray(
+      "labels",
+      { name: args.label },
+      { slugs: args.slug }
+    );
   },
   editPost: async (args) => {
     //need to correct the function
@@ -169,9 +173,8 @@ const root = {
     const postResult = {};
     for (const key of providedArgs) {
       if (key === "author") {
-        console.log("150");
         await updateItmInArray(
-          "author",
+          "authors",
           { username: args.author },
           { slugs: args.oldSlug },
           { slugs: args.slug }
@@ -209,10 +212,8 @@ const root = {
           type: "posts",
         };
         await updateItmPartially("slugs", "slug", args.oldSlug, slugResult);
-        console.log(190);
       }
     }
-    console.log(postResult);
     return await updateItmPartially("posts", "slug", args.oldSlug, postResult);
   },
   chnageUsrPass: async (args) => {
@@ -235,11 +236,6 @@ const root = {
 const contextUser = {
   email: null,
 };
-/*
-app.get("/tshirt", (req, res) => {
-  res.status(200).send({ name: "pky" });
-});
-*/
 
 app.use(bodyParser.json());
 
@@ -332,6 +328,11 @@ async function signinUsr(plainPass, email) {
   contextUser.email = email;
   return generateAccessToken(email);
 }
+async function deleteItmFromArray(collection, query, itemToDelete) {
+  await dbConnection.chnageCollection(collection);
+  await dbConnection.deleteFromArray(query, itemToDelete);
+}
+
 async function updateItmInArray(collection, query, itemToDelete, newItm) {
   await dbConnection.chnageCollection(collection);
   await dbConnection.deleteFromArray(query, itemToDelete);
@@ -450,7 +451,6 @@ async function getStuffOfThisPost(type, slug) {
         all.push({ displayName: itm.displayName, username: itm.username });
       }
     } else if (type == "comments") {
-      console.log(itm);
       if (itm.status == "active") {
         all.push({
           username: itm.username,
@@ -609,7 +609,7 @@ async function searchDb(collection, keyword, keys, ...returnValues) {
 }
 
 async function tstFn() {
-  const uu = await pswStore("xyz", "admin@admin.lk");
+  const uu = await dbConnection.getInnerJoin();
   console.log(uu);
 }
 //tstFn();
