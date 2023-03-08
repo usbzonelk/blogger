@@ -666,6 +666,10 @@ video {
   display: none;
 }
 
+.h-1\/2 {
+  height: 50%;
+}
+
 .h-4 {
   height: 1rem;
 }
@@ -680,10 +684,6 @@ video {
 
 .h-full {
   height: 100%;
-}
-
-.h-1\/2 {
-  height: 50%;
 }
 
 .w-1\/2 {
@@ -720,6 +720,10 @@ video {
 
 .flex-grow {
   flex-grow: 1;
+}
+
+.resize-none {
+  resize: none;
 }
 
 .list-inside {
