@@ -143,8 +143,14 @@ const root = {
     let relatedPosts = [];
     const postLabels = await getPostAttributes(args.post, "labels");
     for (const label of postLabels) {
-      relatedPosts.push(await getJoins("labels", "name", label.name, "posts"));
+      const uu = await getJoins("labels", "name", label.name, "posts");
+      for (const y1 of uu) {
+        if (y1.slug !== args.post) {
+          relatedPosts.push(y1);
+        }
+      }
     }
+    console.log(relatedPosts);
     return relatedPosts;
   },
   getPostsByYear: async (args) => {
@@ -208,7 +214,6 @@ const root = {
       if (args.oldSlug !== args.slug) {
         slugResult = {
           slug: args.slug,
-
           type: "posts",
         };
         if (args.author.name) {

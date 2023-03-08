@@ -1,13 +1,11 @@
 class APIManager {
-  constructor(api_url) {
+  constructor(api_url, token) {
     this.api_url = api_url;
+    this.token = token;
   }
   sendGet = async (query, command) => {
     const myHeaders = new Headers();
-    myHeaders.append(
-      "Authorization",
-      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFkbWluLmxrIiwiaWF0IjoxNjc2OTA2NTcxLCJleHAiOjE2Nzc1MTEzNzF9.BXDSNL2OqYHrSGTVbM2HW9Jt7fhNU2N8YHqF-YGyL9I"
-    );
+    myHeaders.append("Authorization", `Bearer ${this.token}`);
     myHeaders.append("Content-Type", "application/json");
 
     const graphql = JSON.stringify({

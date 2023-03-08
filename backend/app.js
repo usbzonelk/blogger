@@ -8,7 +8,10 @@ const app = express();
 const PORT = 8080;
 
 const api_url = "http://127.0.0.1/graph";
-const manageAPI = new APIManager(api_url);
+const jw_token =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGFkbWluLmxrIiwiaWF0IjoxNjc2OTA2NTcxLCJleHAiOjE2Nzc1MTEzNzF9.BXDSNL2OqYHrSGTVbM2HW9Jt7fhNU2N8YHqF-YGyL9I";
+
+const manageAPI = new APIManager(api_url, jw_token);
 
 app.use(bodyParser.json());
 
@@ -186,6 +189,14 @@ app.get("/*", async (req, res, next) => {
       res.sendFile(path.join(__dirname, "./", "content/static", "style.css"));
     } else if (staticPath == "output.css") {
       res.sendFile(path.join(__dirname, "./", "content/static", "output.css"));
+    } else {
+      return res.sendStatus(404);
+    }
+    return;
+  } else if (userUrl.startsWith("js")) {
+    const staticPath = userUrl.replace("js/", "");
+    if (staticPath == "main.js") {
+      res.sendFile(path.join(__dirname, "./", "content/js", "main.js"));
     } else {
       return res.sendStatus(404);
     }
