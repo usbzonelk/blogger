@@ -6,6 +6,7 @@ const { generateAccessToken, authenticateToken } = require("./authUser");
 
 const express = require("express");
 const { graphqlHTTP } = require("express-graphql");
+const cors = require("cors");
 
 const mongoUSER = "bartyslr";
 const mongoPass = "W4MZeyrsSEFJnilc";
@@ -72,7 +73,7 @@ const root = {
     comment["date"] = args.date;
     comment["status"] = args.status;
 
-    addNewCommentDb(comment);
+    return await addNewCommentDb(comment);
   },
   registerUser: async (args) => {
     console.log({ email: args.email });
@@ -253,6 +254,7 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "*");
   next();
 });
+
 
 app.use("/auth", (req, res, next) => {
   const authHeader = req.headers["authorization"];

@@ -197,6 +197,8 @@ app.get("/*", async (req, res, next) => {
     const staticPath = userUrl.replace("js/", "");
     if (staticPath == "main.js") {
       res.sendFile(path.join(__dirname, "./", "content/js", "main.js"));
+    } else if (staticPath == "apiManager.js") {
+      res.sendFile(path.join(__dirname, "./", "content/js", "apiManager.js"));
     } else {
       return res.sendStatus(404);
     }

@@ -32,6 +32,7 @@ class dbMan {
           .replace(/"/g, "")
       );
       return inputResult[0];
+      
     } finally {
       //await this.connection.client.close();
     }
