@@ -5,7 +5,7 @@ class APIManager {
   }
   sendGet = async (query, command) => {
     const myHeaders = new Headers();
-    myHeaders.append("Authorization", `Bearer ${this.token}`);
+   // myHeaders.append("Authorization", `Bearer ${this.token}`);
     myHeaders.append("Content-Type", "application/json");
 
     const graphql = JSON.stringify({
