@@ -143,10 +143,13 @@ const root = {
   getRelatedPosts: async (args) => {
     let relatedPosts = [];
     const postLabels = await getPostAttributes(args.post, "labels");
+    console.log(postLabels);
+
     for (const label of postLabels) {
       const uu = await getJoins("labels", "name", label.name, "posts");
       for (const y1 of uu) {
-        if (y1.slug !== args.post) {
+        console.log(y1);
+        if (y1.slug !== args.post && !relatedPosts.includes(y1)) {
           relatedPosts.push(y1);
         }
       }
