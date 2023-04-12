@@ -1,89 +1,76 @@
-"use client"; // this is a client component 👈🏽
+import React from "react";
+import { Flex, Box, Text, Button, Switch } from "@chakra-ui/react";
+import Link from "next/link";
+import { Search2Icon } from "@chakra-ui/icons";
 
-import {
-  InfoCircleOutlined,
-  InsertRowBelowOutlined,
-  SmallDashOutlined,
-  HomeOutlined,
-} from "@ant-design/icons";
-
-import { Menu } from "antd";
-import { useState } from "react";
-const items = [
-  {
-    label: "Home",
-    key: "home",
-    icon: <HomeOutlined />,
-  },
-
-  {
-    label: "All Posts",
-    key: "app",
-    icon: <SmallDashOutlined />,
-    disabled: true,
-  },
-  {
-    label: "Categories",
-    key: "categories",
-    icon: <InsertRowBelowOutlined />,
-    children: [
-      {
-        type: "group",
-        label: "Item 1",
-        children: [
-          {
-            label: "Option 1",
-            key: "setting:1",
-          },
-          {
-            label: "Option 2",
-            key: "setting:2",
-          },
-        ],
-      },
-      {
-        type: "group",
-        label: "Item 2",
-        children: [
-          {
-            label: "Option 3",
-            key: "setting:3",
-          },
-          {
-            label: "Option 4",
-            key: "setting:4",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    label: "About ",
-    key: "about",
-    icon: <InfoCircleOutlined />,
-  },
-  {
-    label: (
-      <a href="/" target="_blank" rel="noopener noreferrer">
-        More Info{" "}
-      </a>
-    ),
-    key: "moreInfo",
-  },
-];
 const Navbar = () => {
-  const [current, setCurrent] = useState("home");
-  const onClick = (e) => {
-    console.log("click ", e);
-    setCurrent(e.key);
-  };
   return (
-    <Menu
-      onClick={onClick}
-      selectedKeys={[current]}
-      mode="horizontal"
-      items={items}
-    />
+    <Flex
+      as="nav"
+      align="center"
+      position="fixed"
+      top="0"
+      left="0"
+      right="0"
+      justify="space-between"
+      wrap="wrap"
+      padding="0.8rem"
+      backdropFilter="blur(2.5px)"
+      backgroundColor="rgba(255, 255, 255, 0.3)"
+      zIndex="999"
+      color="blackAlpha.900"
+    >
+      <Flex align="center" mr={5}>
+        <Box p={1} rounded="md">
+          <Text fontSize="xl" fontWeight="bold">
+            Blogger
+          </Text>
+        </Box>
+      </Flex>
+
+      <Box display={{ base: "block", md: "none" }} onClick={() => {}}>
+        <svg
+          fill="black"
+          width="12px"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <title>Menu</title>
+          <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
+        </svg>
+      </Box>
+
+      <Box
+        display={{ base: "none", md: "flex" }}
+        width={{ base: "full", md: "auto" }}
+        alignItems="center"
+        flexGrow={1}
+      >
+        <Button variant="unstyled" mr={2} px={4} textColor={"blackAlpha.900"}>
+          <Link href={"/"}> Home</Link>
+        </Button>
+        <Button variant="unstyled" mr={2} px={4} textColor={"blackAlpha.900"}>
+          {" "}
+          <Link href={"#"}> About</Link>
+        </Button>
+        <Button variant="unstyled" mr={2} px={4} textColor={"blackAlpha.900"}>
+          {" "}
+          <Link href={"#"}> Contact</Link>
+        </Button>
+      </Box>
+
+      <Box display={{ base: "none", md: "flex" }} alignItems="center">
+        <Button variant="unstyled" mr={2} px={4} textColor={"blackAlpha.900"}>
+          {" "}
+          <Switch value={null} />
+        </Button>
+        <Button variant="unstyled" mr={2} px={4} textColor={"blackAlpha.900"}>
+          {" "}
+          <Search2Icon />
+        </Button>
+      </Box>
+    </Flex>
   );
 };
+
 export default Navbar;
