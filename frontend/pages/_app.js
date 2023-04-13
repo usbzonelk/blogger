@@ -1,12 +1,14 @@
 import "../styles/globals.css";
-import Navbar from "../components/Navbar";
 import { ChakraProvider } from "@chakra-ui/react";
-import TestingXX from "../components/tst";
+import dynamic from "next/dynamic";
+
+const Navbar = dynamic(() => import("../components/Navbar"), { ssr: false });
+
 export default function App({ Component, pageProps }) {
   return (
     <>
       <ChakraProvider>
-        <Navbar /> <TestingXX /> <Component {...pageProps} />
+        <Navbar /> <Component {...pageProps} />
       </ChakraProvider>
     </>
   );
