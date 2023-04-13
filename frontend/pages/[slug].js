@@ -1,7 +1,9 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
+import NotFound from "../components/NotFound";
 import Post from "../components/Post";
+
 const PostPage = () => {
   const router = useRouter();
   const { slug } = router.query;
@@ -40,6 +42,7 @@ const PostPage = () => {
     }, [post.title]);
     return <Post post={post} author={author} />;
   } else {
+    return <NotFound />;
   }
 };
 export default PostPage;
