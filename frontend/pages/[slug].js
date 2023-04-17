@@ -39,9 +39,9 @@ const PostPage = () => {
   };
 
   if (slug == "123") {
-    /* useEffect(() => {
+    useEffect(() => {
       window.document.title = post.title;
-    }, [post.title]); */
+    }, [post.title]);
     return <Post post={post} author={author} />;
   } else {
     return <NotFound />;

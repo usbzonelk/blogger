@@ -102,17 +102,14 @@ const Navbar = () => {
 
           <div className="navbar-end">
             <div className="navbar-item">
-              <div className="buttons">
-                <div class="field has-addons">
-                  <div class="control">
-                    <button class="button is-info">
-                      <span class="icon is-small">
-                        <i class="fas fa-search"></i>
-                      </span>
-                    </button>
-                  </div>
+              {/*  <div className="buttons"> */}
+              <div class="field has-addons">
+                <div class="control">
+                  <span class="icon">
+                    <i class="fas fa-search"></i>
+                  </span>
                 </div>
-                
+                {/*  </div> */}
               </div>
             </div>
           </div>
