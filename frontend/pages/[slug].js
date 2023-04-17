@@ -2,7 +2,9 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 import NotFound from "../components/NotFound";
-import Post from "../components/Post";
+/* import Post from "../components/Post";
+ */ import dynamic from "next/dynamic";
+const Post = dynamic(() => import("../components/Post"), { ssr: true });
 
 const PostPage = () => {
   const router = useRouter();
@@ -37,9 +39,9 @@ const PostPage = () => {
   };
 
   if (slug == "123") {
-    useEffect(() => {
+    /* useEffect(() => {
       window.document.title = post.title;
-    }, [post.title]);
+    }, [post.title]); */
     return <Post post={post} author={author} />;
   } else {
     return <NotFound />;

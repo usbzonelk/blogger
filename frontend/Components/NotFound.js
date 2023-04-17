@@ -1,12 +1,10 @@
 import React from "react";
 import Link from "next/link";
-import { Link as CLink } from "@chakra-ui/react";
-import { Text, Heading, Image, Button, Flex } from "@chakra-ui/react";
 
 const NotFound = () => {
   return (
     <div style={{ paddingTop: "4rem" }}>
-      <Flex
+      {/* <Flex
         height="100vh"
         flexDirection="column"
         justifyContent="center"
@@ -31,7 +29,7 @@ const NotFound = () => {
             </Button>
           </CLink>
         </Link>
-      </Flex>
+      </Flex> */}
     </div>
   );
 };

@@ -1,5 +1,4 @@
-import { Box, Heading, Image, Flex, Text } from "@chakra-ui/react";
-import { useBreakpointValue } from "@chakra-ui/react";
+
 
 const Post = (props) => {
   const post = props.post;
@@ -8,7 +7,7 @@ const Post = (props) => {
 
   return (
     <div style={{ paddingTop: "4rem" }}>
-      <Box
+      {/* <Box
         w="100%"
         maxW="800px"
         marginX="auto"
@@ -50,7 +49,7 @@ const Post = (props) => {
             <div style={{ whiteSpace: "pre-line" }}> {post.content}</div>
           </Text>
         </Box>
-      </Box>
+      </Box> */}
     </div>
   );
 };
