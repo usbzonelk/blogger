@@ -2,9 +2,12 @@ import Head from "next/head";
 import PostsContainer from "../components/PostsContainer";
 
 export default function Home() {
-  <>
-    <Head></Head>
-    <p>45454</p>
-    <PostsContainer />
-  </>;
+  return (
+    <div style={{ paddingTop: "5rem" }}>
+      <Head>
+        <title>My Next.js App</title>
+      </Head>
+      <PostsContainer />
+    </div>
+  );
 }
