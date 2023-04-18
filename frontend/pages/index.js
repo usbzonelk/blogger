@@ -1,5 +1,7 @@
 import Head from "next/head";
 import PostsContainer from "../components/PostsContainer";
+import { Provider } from "react-redux";
+import store from "../redux/store";
 
 export default function Home() {
   return (
@@ -7,7 +9,9 @@ export default function Home() {
       <Head>
         <title>My Next.js App</title>
       </Head>
-      <PostsContainer />
+      <Provider store={store}>
+        <PostsContainer />{" "}
+      </Provider>
     </div>
   );
 }

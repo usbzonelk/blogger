@@ -1,6 +1,18 @@
 import PostThumbnail from "./PostThumbnail";
+import { useGetAllPostsMutation } from "../redux/features/posts/postApiSlice";
+import React, { useState, useEffect } from "react";
 
-export default function PostsContainer() {
+function PostsContainer() {
+  const [getAllPosts, { isLoading }] = useGetAllPostsMutation();
+  const lauch = async () => {
+    try {
+      const posts1 = await getAllPosts().unwrap();
+      console.log(posts1);
+    } catch {}
+  };
+  useEffect(() => {
+    lauch();
+  }, []);
   const posts = [
     {
       slug: "a-small-river-by-their-place",
@@ -37,3 +49,5 @@ export default function PostsContainer() {
     </>
   );
 }
+
+export default PostsContainer;
