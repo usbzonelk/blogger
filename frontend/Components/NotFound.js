@@ -3,7 +3,11 @@ import Link from "next/link";
 
 const NotFound = () => {
   return (
-    <div style={{ paddingTop: "4rem" }}>
+    <div style={{ paddingTop: "5rem" }}>
+      <section className="section">
+      <h1 class="title">404 </h1>
+
+      </section>
       {/* <Flex
         height="100vh"
         flexDirection="column"
