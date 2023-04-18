@@ -4,8 +4,38 @@ const PostThumbnail = (props) => {
   const postData = props.post;
 
   return (
-    <div>
-      {/* <Link href={postData.slug} passHref>
+    <section class="section">
+      <div class="card">
+        <div class="card-image">
+          <figure class="image is-4by3">
+            <img src={postData.images.header} alt="Placeholder image" />
+          </figure>
+        </div>
+        <div class="card-content">
+          <div class="media">
+            <div class="media-content">
+              <p class="title is-4">{postData.title}</p>
+              <div class="tags">
+                <span class="tag is-info">Tag 1</span>
+                <span class="tag is-success">Tag 2</span>
+                <span class="tag is-warning">Tag 3</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+
+  {
+    {
+      /*       <Link href={postData.slug}>
+       */
+    }
+    {
+      (" ");
+    }
+    /* <Link href={postData.slug} passHref>
         <div>
           <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
             <Image src={postData.images.header} alt={postData.title} />
@@ -53,9 +83,8 @@ const PostThumbnail = (props) => {
             </Box>
           </Box>
         </div>
-      </Link> */}
-    </div>
-  );
+      </Link> */
+  }
 };
 
 export default PostThumbnail;
