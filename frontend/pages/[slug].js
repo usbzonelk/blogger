@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-
+import { useGetAllSlugsMutation } from "../redux/features/slugs/publicSlugApi";
 import NotFound from "../components/NotFound";
 /* import Post from "../components/Post";
  */ import dynamic from "next/dynamic";
@@ -9,6 +9,11 @@ const Post = dynamic(() => import("../components/Post"), { ssr: true });
 const PostPage = () => {
   const router = useRouter();
   const { slug } = router.query;
+  const [getAllSlugs, { data: slugs, isLoading: isLoadingSlugs, isError }] =
+    useGetAllSlugsMutation();
+  useEffect(() => {
+    getAllSlugs();
+  }, [getAllSlugs]);
 
   const author = {
     username: "Jon",
@@ -37,14 +42,32 @@ const PostPage = () => {
     status: "published",
     _id: "63d4ce0b0969cbdfb123b3ff",
   };
-
-  if (slug == "123") {
-    useEffect(() => {
-      window.document.title = post.title;
-    }, [post.title]);
-    return <Post post={post} author={author} />;
+  if (isLoadingSlugs) {
+    return (
+      <div class="hero is-fullheight">
+        <div class="hero-body">
+          <div class="container has-text-centered">
+            <span class="icon is-large is-loading">
+              <i class="fas fa-spinner fa-spin fa-3x"></i>
+            </span>
+            <h1 class="title">Loading...</h1>
+          </div>
+        </div>
+      </div>
+    );
   } else {
-    return <NotFound />;
+    console.log("444");
+  }
+
+  if (slugs) {
+    if (slugs.includes(slug)) {
+      useEffect(() => {
+        window.document.title = "post.title";
+      });
+      return <Post post={post} author={author} />;
+    } else {
+      return <NotFound />;
+    }
   }
 };
 export default PostPage;
