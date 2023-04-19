@@ -1,21 +1,15 @@
 import PostThumbnail from "./PostThumbnail";
 import { useGetAllPostsMutation } from "../redux/features/posts/postApiSlice";
-import { useGetAllSlugsMutation } from "../redux/features/slugs/publicSlugApi";
 import React, { useState, useEffect } from "react";
 
 function PostsContainer() {
-  const [getAllSlugs, { isLoading }] = useGetAllSlugsMutation();
-  const lauch = async () => {
-    try {
-      const posts1 = await getAllSlugs().unwrap();
-
-      console.log(posts1);
-    } catch {}
-  };
+  const [getAllPosts, { data: posts, isLoading }] = useGetAllPostsMutation();
+  console.log(posts);
   useEffect(() => {
-    lauch();
-  }, []);
-  const posts = [
+    getAllPosts();
+  }, [getAllPosts]);
+
+  /* const posts = [
     {
       slug: "a-small-river-by-their-place",
       title: "A Small River by Their Place",
@@ -34,10 +28,12 @@ function PostsContainer() {
       },
       status: "draft",
     },
-  ];
+  ]; */
+  if (isLoading) return <p>Loading...</p>;
+
   return (
     <>
-      {posts.length < 1 ? (
+      {!isLoading && (!posts || posts.length < 1) ? (
         <section>
           <h1>No Posts found</h1>
         </section>

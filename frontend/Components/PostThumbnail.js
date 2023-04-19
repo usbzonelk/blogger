@@ -9,7 +9,14 @@ const PostThumbnail = (props) => {
         <div class="card">
           <div class="card-image">
             <figure class="image is-4by3">
-              <img src={postData.images.header} alt="Placeholder image" />
+              <img
+                src={
+                  !postData.images
+                    ? "https://4.bp.blogspot.com/-SFvd24mMj4M/XbdGtVvkBJI/AAAAAAAAADg/u6jCI-VpFF4H0lSKvtVBuiUq0bUhCT78gCLcBGAsYHQ/s640/It%25E2%2580%2599s%2BSomething%2BThat%2BI%2Bwanted%2Bgo%2Bto%2BAchieve%2B1.jpg"
+                    : postData.images.header
+                }
+                alt="Placeholder image"
+              />
             </figure>
           </div>
           <div class="card-content">
@@ -28,65 +35,6 @@ const PostThumbnail = (props) => {
       </Link>
     </section>
   );
-
-  {
-    {
-      /*       <Link href={postData.slug}>
-       */
-    }
-    {
-      (" ");
-    }
-    /* <Link href={postData.slug} passHref>
-        <div>
-          <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
-            <Image src={postData.images.header} alt={postData.title} />
-
-            <Box p="6">
-              <Box display="flex" alignItems="baseline">
-                <Badge borderRadius="full" px="2" colorScheme="teal">
-                  {postData.status}
-                </Badge>
-                <Box
-                  color="gray.500"
-                  fontWeight="semibold"
-                  letterSpacing="wide"
-                  fontSize="xs"
-                  textTransform="uppercase"
-                  ml="2"
-                >
-                  cat1 &bull; cat2
-                </Box>
-              </Box>
-
-              <Box
-                mt="1"
-                fontWeight="semibold"
-                as="h4"
-                lineHeight="tight"
-                noOfLines={1}
-              >
-                {postData.title}
-              </Box>
-
-              <Box>
-                xxx
-                <Box as="span" color="gray.600" fontSize="sm">
-                  / wk
-                </Box>
-              </Box>
-
-              <Box display="flex" mt="2" alignItems="center">
-                
-                <Box as="span" ml="2" color="gray.600" fontSize="sm">
-                  00 reviews
-                </Box>
-              </Box>
-            </Box>
-          </Box>
-        </div>
-      </Link> */
-  }
 };
 
 export default PostThumbnail;
