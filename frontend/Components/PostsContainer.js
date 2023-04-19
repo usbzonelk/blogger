@@ -1,12 +1,14 @@
 import PostThumbnail from "./PostThumbnail";
 import { useGetAllPostsMutation } from "../redux/features/posts/postApiSlice";
+import { useGetAllSlugsMutation } from "../redux/features/slugs/publicSlugApi";
 import React, { useState, useEffect } from "react";
 
 function PostsContainer() {
-  const [getAllPosts, { isLoading }] = useGetAllPostsMutation();
+  const [getAllSlugs, { isLoading }] = useGetAllSlugsMutation();
   const lauch = async () => {
     try {
-      const posts1 = await getAllPosts().unwrap();
+      const posts1 = await getAllSlugs().unwrap();
+
       console.log(posts1);
     } catch {}
   };
@@ -42,7 +44,7 @@ function PostsContainer() {
       ) : (
         <div class="container" style={{ maxWidth: "800px" }}>
           {posts.map((post) => (
-            <PostThumbnail post={post} />
+            <PostThumbnail post={post} key={post.slug} />
           ))}
         </div>
       )}

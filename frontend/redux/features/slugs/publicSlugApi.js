@@ -1,31 +1,28 @@
 import { apiSlice } from "../../api/publicApi";
 
-export const postApiSlice = apiSlice.injectEndpoints({
+export const publicSlugApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getAllPosts: builder.mutation({
+    getAllSlugs: builder.mutation({
       query: () => ({
         url: "/",
         method: "POST",
         body: {
           query: `
             query {
-              getSemiPostsWithState {
+              getAllSlugs {
                 slug
-                title
-                images {
-                  header
-                }
-                status
+                type
               }
             }
+            
           `,
         },
       }),
       transformResponse: (response) => {
-        return response.data.getSemiPostsWithState;
+        return response.data.getAllSlugs;
       },
     }),
   }),
 });
 
-export const { useGetAllPostsMutation } = postApiSlice;
+export const { useGetAllSlugsMutation } = publicSlugApi;
