@@ -43,6 +43,8 @@ const PostPage = () => {
     _id: "63d4ce0b0969cbdfb123b3ff",
   };
   if (isLoadingSlugs) {
+    window.document.title = "Loading";
+
     return (
       <div class="hero is-fullheight">
         <div class="hero-body">
@@ -60,10 +62,9 @@ const PostPage = () => {
   }
 
   if (slugs) {
-    if (slugs.includes(slug)) {
-      useEffect(() => {
-        window.document.title = "post.title";
-      });
+    if (slugs.find((slug0) => slug0.slug === slug)) {
+      window.document.title = post.title;
+
       return <Post post={post} author={author} />;
     } else {
       return <NotFound />;
