@@ -1,6 +1,8 @@
 import PostThumbnail from "./PostThumbnail";
 import { useGetAllPostsMutation } from "../redux/features/posts/postApiSlice";
 import React, { useState, useEffect } from "react";
+import FullScreenLoading from "./FullScreenLoading";
+import LostApiConnection from "./LostApiConnection";
 
 function PostsContainer() {
   const [getAllPosts, { data: posts, isLoading, isError }] =
@@ -10,18 +12,8 @@ function PostsContainer() {
     getAllPosts();
   }, [getAllPosts]);
 
-  if (isLoading)
-    return (
-      <section class="section">
-        <h1 className="title">Loading...</h1>
-      </section>
-    );
-  if (isError)
-    return (
-      <section class="section">
-        <h1 className="title">Error Connecting to API</h1>
-      </section>
-    );
+  if (isLoading) return <FullScreenLoading />;
+  if (isError) return <LostApiConnection />;
 
   return (
     <>
