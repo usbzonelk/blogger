@@ -25,7 +25,37 @@ export const postApiSlice = apiSlice.injectEndpoints({
         return response.data.getSemiPostsWithState;
       },
     }),
+
+    getFullPost: builder.mutation({
+      query: (slug) => ({
+        url: "/",
+        method: "POST",
+        body: {
+          query: `
+            query {
+              getFullPost(slug: "${slug}") {
+                _id
+                title
+                content
+                date {
+                  fullDate
+                }
+                status
+                images {
+                  header
+                  imgs
+                }
+              }
+            }
+            
+          `,
+        },
+      }),
+      transformResponse: (response) => {
+        return response.data.getFullPost;
+      },
+    }),
   }),
 });
 
-export const { useGetAllPostsMutation } = postApiSlice;
+export const { useGetFullPostMutation, useGetAllPostsMutation } = postApiSlice;
