@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div style={{ paddingTop: "5rem" }}>
       <Head>
-        <title>My Next.js App</title>
+        <title>Blogger</title>
       </Head>
       <Provider store={store}>
         <PostsContainer />{" "}

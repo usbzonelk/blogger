@@ -1,14 +1,9 @@
 import { useRouter } from "next/router";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useGetAllSlugsMutation } from "../redux/features/slugs/publicSlugApi";
-import { useGetFullPostMutation } from "../redux/features/posts/postApiSlice";
 import NotFound from "../components/NotFound";
 import LoadPost from "../components/LoadPost";
 import FullScreenLoading from "../components/FullScreenLoading";
-
-import dynamic from "next/dynamic";
-
-const Post = dynamic(() => import("../components/Post"), { ssr: true });
 
 const PostPage = () => {
   const router = useRouter();
@@ -20,17 +15,10 @@ const PostPage = () => {
     getAllSlugs();
   }, [getAllSlugs]);
 
-  const author = {
-    username: "Jon",
-    displayName: "John gaggs",
-  };
-
   if (isLoadingSlugs) {
     window.document.title = "Loading";
 
     return <FullScreenLoading />;
-  } else {
-    console.log("444");
   }
 
   if (slugs) {

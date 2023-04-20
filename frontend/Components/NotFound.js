@@ -2,11 +2,11 @@ import React from "react";
 import Link from "next/link";
 
 const NotFound = () => {
+  window.document.title = "Page Not Found | 404";
   return (
     <div style={{ paddingTop: "5rem" }}>
       <section className="section">
-      <h1 class="title">404 </h1>
-
+        <h1 class="title">404 </h1>
       </section>
       {/* <Flex
         height="100vh"

@@ -1,5 +1,8 @@
 import { useEffect } from "react";
-import { useGetFullPostMutation } from "../redux/features/posts/postApiSlice";
+import {
+  useGetFullPostMutation,
+  useGetAuthsPostMutation,
+} from "../redux/features/posts/postApiSlice";
 import Post from "./Post";
 import FullScreenLoading from "./FullScreenLoading";
 
@@ -10,27 +13,29 @@ const LoadPost = (props) => {
     getFullPost,
     { data: post, isLoading: isLoadingPost, isError: loadingPostError },
   ] = useGetFullPostMutation();
+  const [
+    getAuthsPost,
+    { data: author, isLoading: isLoadingAuth, isError: loadingAuthError },
+  ] = useGetAuthsPostMutation();
 
   useEffect(() => {
     getFullPost(slug);
-  }, [getFullPost]);
+    getAuthsPost(slug);
+  }, [getFullPost, getAuthsPost, slug]);
 
-  const author = {
-    username: "Jon",
-    displayName: "John gaggs",
-  };
-
-  if (isLoadingPost) {
+  if (isLoadingPost || isLoadingAuth) {
     window.document.title = "Loading";
-    console.log(isLoadingPost, "454");
-
     return <FullScreenLoading />;
-  } else {
-    console.log(isLoadingPost, "454");
   }
-  if (post) {
+  if (post && author) {
     window.document.title = post.title;
-    return <Post post={post} author={author} />;
+
+    return (
+      <Post
+        post={post}
+        author={author ? (author[0] ? author[0] : "Anonymous") : "Anonymous"}
+      />
+    );
   }
 };
 export default LoadPost;

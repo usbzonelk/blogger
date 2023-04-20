@@ -55,7 +55,31 @@ export const postApiSlice = apiSlice.injectEndpoints({
         return response.data.getFullPost;
       },
     }),
+    getAuthsPost: builder.mutation({
+      query: (slug) => ({
+        url: "/",
+        method: "POST",
+        body: {
+          query: `
+            query {
+              getAuthsOfPost(slug: "${slug}") {
+                displayName
+                username
+              }
+            }
+            
+          `,
+        },
+      }),
+      transformResponse: (response) => {
+        return response.data.getAuthsOfPost;
+      },
+    }),
   }),
 });
 
-export const { useGetFullPostMutation, useGetAllPostsMutation } = postApiSlice;
+export const {
+  useGetFullPostMutation,
+  useGetAllPostsMutation,
+  useGetAuthsPostMutation,
+} = postApiSlice;
