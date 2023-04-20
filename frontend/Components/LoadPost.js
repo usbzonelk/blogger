@@ -39,6 +39,7 @@ const LoadPost = (props) => {
     console.log(isLoadingPost, "454");
   }
   if (post) {
+    window.document.title = post.title;
     return <Post post={post} author={author} />;
   }
 };
