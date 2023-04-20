@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { useGetAllSlugsMutation } from "../redux/features/slugs/publicSlugApi";
 import { useGetFullPostMutation } from "../redux/features/posts/postApiSlice";
 import NotFound from "../components/NotFound";
+import LoadPost from "../components/LoadPost";
 
 import dynamic from "next/dynamic";
 
@@ -14,30 +15,16 @@ const PostPage = () => {
   const [getAllSlugs, { data: slugs, isLoading: isLoadingSlugs, isError }] =
     useGetAllSlugsMutation();
 
-  const [
-    getFullPost,
-    { data: post, isLoading: isLoadingPost, isError: loadingPostError },
-  ] = useGetFullPostMutation();
-
-  const getFullPostHandler = useRef();
-
   useEffect(() => {
     getAllSlugs();
   }, [getAllSlugs]);
-
-  useEffect(() => {
-    const getPostData = async () => {
-      await getFullPost(slug);
-    };
-    getFullPostHandler.current = getPostData;
-  }, [getFullPost, slug]);
 
   const author = {
     username: "Jon",
     displayName: "John gaggs",
   };
 
-  if (isLoadingSlugs || isLoadingPost) {
+  if (isLoadingSlugs ) {
     window.document.title = "Loading";
 
     return (
@@ -58,9 +45,7 @@ const PostPage = () => {
 
   if (slugs) {
     if (slugs.find((slug0) => slug0.slug === slug)) {
-      getFullPostHandler.current();
-      console.log(post);
-      return <Post post={post} author={author} />;
+      return <LoadPost slug={slug} />;
     } else {
       return <NotFound />;
     }
