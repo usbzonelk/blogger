@@ -75,6 +75,30 @@ export const postApiSlice = apiSlice.injectEndpoints({
         return response.data.getAuthsOfPost;
       },
     }),
+    searchPosts: builder.mutation({
+      query: (keyword) => ({
+        url: "/",
+        method: "POST",
+        body: {
+          query: `
+            query {
+              searchPosts(keywords: "${keyword}") {
+                _id
+                slug
+                title
+                images {
+                  header
+                }
+                status
+              }
+            }
+                      `,
+        },
+      }),
+      transformResponse: (response) => {
+        return response.data.searchPosts;
+      },
+    }),
   }),
 });
 
@@ -82,4 +106,5 @@ export const {
   useGetFullPostMutation,
   useGetAllPostsMutation,
   useGetAuthsPostMutation,
+  useSearchPostsMutation,
 } = postApiSlice;

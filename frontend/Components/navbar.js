@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import Link from "next/link";
+import SearchBar from "./SearchBar";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState("navbar-menu");
@@ -75,10 +76,6 @@ const Navbar = () => {
               <Link href="/">Home</Link>
             </a>
 
-            <a className="navbar-item">
-              <Link href="#">Documentation</Link>
-            </a>
-
             <div className="navbar-item has-dropdown is-hoverable">
               <a className="navbar-link">More</a>
 
@@ -102,15 +99,7 @@ const Navbar = () => {
 
           <div className="navbar-end">
             <div className="navbar-item">
-              {/*  <div className="buttons"> */}
-              <div class="field has-addons">
-                <div class="control">
-                  <span class="icon">
-                    <i class="fas fa-search"></i>
-                  </span>
-                </div>
-                {/*  </div> */}
-              </div>
+              <SearchBar />
             </div>
           </div>
         </div>
