@@ -52,6 +52,7 @@ const LoadPost = (props) => {
         author={author ? (author[0] ? author[0] : "Anonymous") : "Anonymous"}
         labels={labels ? labels : null}
         comments={comments ? comments : null}
+        slug={slug}
       />
     );
   }

@@ -124,11 +124,10 @@ export const postApiSlice = apiSlice.injectEndpoints({
         url: "/",
         method: "POST",
         body: {
-          mutation: `
+          query: `
           mutation {
-            addNewComment(slug: "${comment.slug}", username: "${comment.username}", content: "${comment.content}", date: "${comment.date}", status: "${comment.status}")
+            addNewComment(slug: "${comment.slug}", username: "${comment.username}", content: "${comment.content}", date: "${comment.date}", status: "active")
           }
-          
           `,
         },
       }),
