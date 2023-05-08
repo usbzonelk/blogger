@@ -1,3 +1,5 @@
+import CommentBox from "./CommentBox";
+
 const Post = (props) => {
   const post = props.post;
   const author = props.author;
@@ -47,7 +49,9 @@ const Post = (props) => {
             {" "}
             {post.content}
           </div>
+
         </section>{" "}
+          <CommentBox />
       </div>
     </div>
   );

@@ -118,6 +118,47 @@ export const postApiSlice = apiSlice.injectEndpoints({
         return response.data.searchPosts;
       },
     }),
+
+    addNewComment: builder.mutation({
+      query: (comment) => ({
+        url: "/",
+        method: "POST",
+        body: {
+          mutation: `
+          mutation {
+            addNewComment(slug: "${comment.slug}", username: "${comment.username}", content: "${comment.content}", date: "${comment.date}", status: "${comment.status}")
+          }
+          
+          `,
+        },
+      }),
+      transformResponse: (response) => {
+        return response.data.addNewComment;
+      },
+    }),
+
+    getCommentsOfPost: builder.mutation({
+      query: (slug) => ({
+        url: "/",
+        method: "POST",
+        body: {
+          query: `
+            query {
+              getCommentsOfPost(slug: "${slug}"){ 
+                username
+                date
+                content
+              }
+            }
+            
+            
+          `,
+        },
+      }),
+      transformResponse: (response) => {
+        return response.data.getCommentsOfPost;
+      },
+    }),
   }),
 });
 
@@ -127,4 +168,6 @@ export const {
   useGetAuthsPostMutation,
   useSearchPostsMutation,
   useGetLabelsOfPostMutation,
+  useAddNewCommentMutation,
+  useGetCommentsOfPostMutation,
 } = postApiSlice;
