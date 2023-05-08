@@ -1,6 +1,7 @@
 const Post = (props) => {
   const post = props.post;
   const author = props.author;
+  const labels = props.labels;
 
   return (
     <div style={{ paddingTop: "5rem" }}>
@@ -10,6 +11,25 @@ const Post = (props) => {
 
           <h2 class="subtitle">By {author.displayName}</h2>
           <h3 class="subtitle">{post.fullDate}</h3>
+          <div class="card-content">
+            <div class="media">
+              <div class="media-content">
+                <div class="tags">
+                  {labels
+                    ? labels.map((label, idx) => {
+                        return (
+                          <span key={idx} class="tag is-info">
+                            {label}
+                          </span>
+                        );
+                      })
+                    : ""}
+                  {/* <span class="tag is-success">Tag 2</span>
+                  <span class="tag is-warning">Tag 3</span> */}
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
         <section class="section" style={{ paddingTop: "1rem" }}>
           <figure class="image is-16by9">

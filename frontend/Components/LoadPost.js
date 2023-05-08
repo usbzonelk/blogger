@@ -3,6 +3,8 @@ import {
   useGetFullPostMutation,
   useGetAuthsPostMutation,
 } from "../redux/features/posts/postApiSlice";
+import { useGetLabelsOfPostMutation } from "../redux/features/posts/postApiSlice";
+
 import Post from "./Post";
 import FullScreenLoading from "./FullScreenLoading";
 
@@ -17,11 +19,16 @@ const LoadPost = (props) => {
     getAuthsPost,
     { data: author, isLoading: isLoadingAuth, isError: loadingAuthError },
   ] = useGetAuthsPostMutation();
+  const [
+    getLabelsOfPost,
+    { data: labels, isLoading: isLabelsLoading, isError: loadingTagsError },
+  ] = useGetLabelsOfPostMutation();
 
   useEffect(() => {
     getFullPost(slug);
     getAuthsPost(slug);
-  }, [getFullPost, getAuthsPost, slug]);
+    getLabelsOfPost(slug);
+  }, [getFullPost, getAuthsPost, getLabelsOfPost, slug]);
 
   if (isLoadingPost || isLoadingAuth) {
     window.document.title = "Loading";
@@ -34,6 +41,7 @@ const LoadPost = (props) => {
       <Post
         post={post}
         author={author ? (author[0] ? author[0] : "Anonymous") : "Anonymous"}
+        labels={labels ? labels : null}
       />
     );
   }
