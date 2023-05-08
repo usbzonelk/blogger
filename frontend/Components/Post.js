@@ -4,6 +4,7 @@ const Post = (props) => {
   const post = props.post;
   const author = props.author;
   const labels = props.labels;
+  const comments = props.comments;
 
   return (
     <div style={{ paddingTop: "5rem" }}>
@@ -49,9 +50,20 @@ const Post = (props) => {
             {" "}
             {post.content}
           </div>
-
         </section>{" "}
-          <CommentBox />
+        {comments
+          ? comments.map((comment, idx) => {
+              return (
+                <CommentBox
+                  itemNum={idx}
+                  key={idx}
+                  username={comment.username}
+                  content={comment.content}
+                  date={comment.date}
+                />
+              );
+            })
+          : null}
       </div>
     </div>
   );

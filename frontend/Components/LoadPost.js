@@ -4,6 +4,7 @@ import {
   useGetAuthsPostMutation,
 } from "../redux/features/posts/postApiSlice";
 import { useGetLabelsOfPostMutation } from "../redux/features/posts/postApiSlice";
+import { useGetCommentsOfPostMutation } from "../redux/features/posts/postApiSlice";
 
 import Post from "./Post";
 import FullScreenLoading from "./FullScreenLoading";
@@ -23,14 +24,22 @@ const LoadPost = (props) => {
     getLabelsOfPost,
     { data: labels, isLoading: isLabelsLoading, isError: loadingTagsError },
   ] = useGetLabelsOfPostMutation();
-
+  const [
+    getCommentsOfPost,
+    {
+      data: comments,
+      isLoading: areCommentsLoading,
+      isError: loadingCommentsError,
+    },
+  ] = useGetCommentsOfPostMutation();
   useEffect(() => {
     getFullPost(slug);
     getAuthsPost(slug);
     getLabelsOfPost(slug);
-  }, [getFullPost, getAuthsPost, getLabelsOfPost, slug]);
+    getCommentsOfPost(slug);
+  }, [getFullPost, getAuthsPost, getLabelsOfPost, getCommentsOfPost, slug]);
 
-  if (isLoadingPost || isLoadingAuth) {
+  if (isLoadingPost || isLoadingAuth || areCommentsLoading) {
     window.document.title = "Loading";
     return <FullScreenLoading />;
   }
@@ -42,6 +51,7 @@ const LoadPost = (props) => {
         post={post}
         author={author ? (author[0] ? author[0] : "Anonymous") : "Anonymous"}
         labels={labels ? labels : null}
+        comments={comments ? comments : null}
       />
     );
   }
