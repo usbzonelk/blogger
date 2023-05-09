@@ -1,12 +1,7 @@
-import CommentBox from "./CommentBox";
-import AddCommentBox from "./AddCommentBox";
-
 const Post = (props) => {
   const post = props.post;
   const author = props.author;
   const labels = props.labels;
-  const comments = props.comments;
-  const slug = props.slug;
 
   return (
     <div style={{ paddingTop: "5rem" }}>
@@ -53,21 +48,7 @@ const Post = (props) => {
             {post.content}
           </div>
         </section>{" "}
-        <AddCommentBox slug={slug} />
-        <br />
-        {comments
-          ? comments.map((comment, idx) => {
-              return (
-                <CommentBox
-                  itemNum={idx + 1}
-                  key={idx}
-                  username={comment.username}
-                  content={comment.content}
-                  date={comment.date}
-                />
-              );
-            })
-          : null}
+        
       </div>
     </div>
   );

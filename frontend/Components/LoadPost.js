@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   useGetFullPostMutation,
   useGetAuthsPostMutation,
@@ -7,6 +7,8 @@ import { useGetLabelsOfPostMutation } from "../redux/features/posts/postApiSlice
 import { useGetCommentsOfPostMutation } from "../redux/features/posts/postApiSlice";
 
 import Post from "./Post";
+import CommentsLoader from "./CommentsLoader";
+import AddCommentBox from "./AddCommentBox";
 import FullScreenLoading from "./FullScreenLoading";
 
 const LoadPost = (props) => {
@@ -27,17 +29,21 @@ const LoadPost = (props) => {
   const [
     getCommentsOfPost,
     {
-      data: comments,
+      data: commentsLoad,
       isLoading: areCommentsLoading,
       isError: loadingCommentsError,
     },
   ] = useGetCommentsOfPostMutation();
+
   useEffect(() => {
     getFullPost(slug);
     getAuthsPost(slug);
     getLabelsOfPost(slug);
     getCommentsOfPost(slug);
+    setComments(commentsLoad);
   }, [getFullPost, getAuthsPost, getLabelsOfPost, getCommentsOfPost, slug]);
+
+  const [comments, setComments] = useState(commentsLoad);
 
   if (isLoadingPost || isLoadingAuth || areCommentsLoading) {
     window.document.title = "Loading";
@@ -47,13 +53,18 @@ const LoadPost = (props) => {
     window.document.title = post.title;
 
     return (
-      <Post
-        post={post}
-        author={author ? (author[0] ? author[0] : "Anonymous") : "Anonymous"}
-        labels={labels ? labels : null}
-        comments={comments ? comments : null}
-        slug={slug}
-      />
+      <>
+        <Post
+          post={post}
+          author={author ? (author[0] ? author[0] : "Anonymous") : "Anonymous"}
+          labels={labels ? labels : null}
+          comments={comments ? comments : null}
+        />
+
+        <AddCommentBox slug={slug} />
+        <br />
+        {comments ? <CommentsLoader comments={comments} /> : "No Comments"}
+      </>
     );
   }
 };

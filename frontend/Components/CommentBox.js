@@ -24,10 +24,12 @@ const CommentBox = (props) => {
           </div>
           <br />
           <div class="content">
-            {content}
+            <b>{content}</b>
             <br />
             <br />
-            <time datetime="2016-1-1">{date}</time>
+            <time datetime="2016-1-1">
+              <i>{date}</i>
+            </time>
           </div>
         </div>
 

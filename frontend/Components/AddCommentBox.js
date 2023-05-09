@@ -13,7 +13,12 @@ const AddCommentBox = (props) => {
   return (
     <>
       {" "}
-      <div class="container" style={{ maxWidth: "800px", margin: "1rem" }}>
+      <div
+        class="container"
+        style={{
+          maxWidth: "800px",
+        }}
+      >
         <form
           onSubmit={async (e) => {
             e.preventDefault();
@@ -23,7 +28,6 @@ const AddCommentBox = (props) => {
             commentObj.content = comment;
             commentObj.date = new Date();
             await addNewComment(commentObj);
-            
           }}
         >
           <div class="field">
