@@ -4,7 +4,7 @@ import {
   useGetAuthsPostMutation,
 } from "../redux/features/posts/postApiSlice";
 import { useGetLabelsOfPostMutation } from "../redux/features/posts/postApiSlice";
-
+import { useGetRelatedPostsMutation } from "../redux/features/posts/postApiSlice";
 import Post from "./Post";
 import CommentsLoader from "./CommentsLoader";
 import RelatedPosts from "./RelatedPosts";
@@ -26,12 +26,17 @@ const LoadPost = (props) => {
     getLabelsOfPost,
     { data: labels, isLoading: isLabelsLoading, isError: loadingTagsError },
   ] = useGetLabelsOfPostMutation();
+  const [
+    getRelatedPosts,
+    { data: relatedPosts, isLoading: isRelatedLoading, isError: isRelatedErr },
+  ] = useGetRelatedPostsMutation();
 
   useEffect(() => {
     getFullPost(slug);
     getAuthsPost(slug);
     getLabelsOfPost(slug);
-  }, [getFullPost, getAuthsPost, getLabelsOfPost, slug]);
+    getRelatedPosts(slug);
+  }, [getFullPost, getAuthsPost, getLabelsOfPost, getRelatedPosts, slug]);
 
   if (isLoadingPost || isLoadingAuth) {
     window.document.title = "Loading";
@@ -50,7 +55,7 @@ const LoadPost = (props) => {
         />
 
         <br />
-        <RelatedPosts />
+        <RelatedPosts related={relatedPosts} />
 
         <CommentsLoader slug={slug} />
         <br />
