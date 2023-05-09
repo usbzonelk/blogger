@@ -25,8 +25,7 @@ const Navbar = () => {
         justify: "space-between",
         wrap: "wrap",
         padding: "0.8rem",
-        /*         filter: "blur(2.5px)",
-         */ backgroundColor: "rgba(255, 255, 255, 0.3)",
+        backgroundColor: "rgba(255, 255, 255, 0.3)",
         zIndex: "999",
       }}
     >
@@ -73,7 +72,7 @@ const Navbar = () => {
         <div id="navbarBasicExample" className={isOpen}>
           <div className="navbar-start">
             <a className="navbar-item">
-              <Link href="/">Home</Link>
+              <a href="/">Home</a>
             </a>
 
             <div className="navbar-item has-dropdown is-hoverable">
@@ -81,17 +80,17 @@ const Navbar = () => {
 
               <div className="navbar-dropdown">
                 <a className="navbar-item">
-                  <Link href="#">About</Link>
+                  <a href="#">About</a>
                 </a>
                 <a className="navbar-item">
-                  <Link href="#">Jobs</Link>
+                  <a href="#">Jobs</a>
                 </a>
                 <a className="navbar-item">
-                  <Link href="#">Contact</Link>
+                  <a href="#">Contact</a>
                 </a>
                 <hr className="navbar-divider" />
                 <a className="navbar-item">
-                  <Link href="#">Report an issue</Link>
+                  <a href="#">Report an issue</a>
                 </a>
               </div>
             </div>
@@ -106,108 +105,6 @@ const Navbar = () => {
       </nav>
     </div>
   );
-  /*  <Flex
-      as="nav"
-      align="center"
-      position="fixed"
-      top="0"
-      left="0"
-      right="0"
-      justify="space-between"
-      wrap="wrap"
-      padding="0.8rem"
-      backdropFilter="blur(2.5px)"
-      backgroundColor="rgba(255, 255, 255, 0.3)"
-      zIndex="999"
-      color="blackAlpha.900"
-    >
-      <Flex align="center" mr={5}>
-        <Box p={1} rounded="md">
-          <Text fontSize="xl" fontWeight="bold">
-            <Image src={icon} />
-          </Text>
-        </Box>
-      </Flex>
-
-      <Box display={{ base: "block", md: "none" }} onClick={() => {}}>
-        <Menu>
-          <MenuButton as={Button}>
-            {" "}
-            <svg
-              fill="black"
-              width="12px"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <title>Menu</title>
-              <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-            </svg>
-          </MenuButton>
-          <MenuList>
-            <MenuItem>
-              <Button
-                variant="unstyled"
-                mr={2}
-                px={4}
-                textColor={"blackAlpha.900"}
-              >
-                <Link href={"/"}> Home</Link>
-              </Button>
-            </MenuItem>
-            <MenuItem>
-              <Button
-                variant="unstyled"
-                mr={2}
-                px={4}
-                textColor={"blackAlpha.900"}
-              >
-                <Link href={"#"}> About</Link>
-              </Button>
-            </MenuItem>
-            <MenuItem>
-              <Button
-                variant="unstyled"
-                mr={2}
-                px={4}
-                textColor={"blackAlpha.900"}
-              >
-                <Link href={"#"}> Contact</Link>
-              </Button>
-            </MenuItem>
-          </MenuList>
-        </Menu>
-      </Box>
-
-      <Box
-        display={{ base: "none", md: "flex" }}
-        width={{ base: "full", md: "auto" }}
-        alignItems="center"
-        flexGrow={1}
-      >
-        <Button variant="unstyled" mr={2} px={4} textColor={"blackAlpha.900"}>
-          <Link href={"/"}> Home</Link>
-        </Button>
-        <Button variant="unstyled" mr={2} px={4} textColor={"blackAlpha.900"}>
-          {" "}
-          <Link href={"#"}> About</Link>
-        </Button>
-        <Button variant="unstyled" mr={2} px={4} textColor={"blackAlpha.900"}>
-          {" "}
-          <Link href={"#"}> Contact</Link>
-        </Button>
-      </Box>
-
-      <Box display={{ base: "none", md: "flex" }} alignItems="center">
-        <Button variant="unstyled" mr={2} px={4} textColor={"blackAlpha.900"}>
-          {" "}
-          <Switch value={null} />
-        </Button>
-        <Button variant="unstyled" mr={2} px={4} textColor={"blackAlpha.900"}>
-          {" "}
-          <Search2Icon />
-        </Button>
-      </Box>
-    </Flex> */
 };
 
 export default Navbar;

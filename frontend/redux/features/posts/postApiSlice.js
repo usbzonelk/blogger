@@ -158,6 +158,32 @@ export const postApiSlice = apiSlice.injectEndpoints({
         return response.data.getCommentsOfPost;
       },
     }),
+    getRelatedPosts: builder.mutation({
+      query: (slug) => ({
+        url: "/",
+        method: "POST",
+        body: {
+          query: `
+            query {
+              getRelatedPosts(post: "${slug}", filter: {status: "active"}) {
+                _id
+                slug
+                title
+                images {
+                  header
+                }
+                status
+              }
+            }
+            
+            
+          `,
+        },
+      }),
+      transformResponse: (response) => {
+        return response.data.getRelatedPosts;
+      },
+    }),
   }),
 });
 
@@ -169,4 +195,5 @@ export const {
   useGetLabelsOfPostMutation,
   useAddNewCommentMutation,
   useGetCommentsOfPostMutation,
+  useGetRelatedPostsMutation,
 } = postApiSlice;

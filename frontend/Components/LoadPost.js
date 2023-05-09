@@ -7,6 +7,7 @@ import { useGetLabelsOfPostMutation } from "../redux/features/posts/postApiSlice
 
 import Post from "./Post";
 import CommentsLoader from "./CommentsLoader";
+import RelatedPosts from "./RelatedPosts";
 
 import FullScreenLoading from "./FullScreenLoading";
 
@@ -49,8 +50,10 @@ const LoadPost = (props) => {
         />
 
         <br />
+        <RelatedPosts />
 
         <CommentsLoader slug={slug} />
+        <br />
       </>
     );
   }

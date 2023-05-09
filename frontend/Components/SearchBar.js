@@ -1,9 +1,17 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const SearchBar = () => {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  });
+
   const [searchString, setSearchString] = useState(
-    new URLSearchParams(window.location.search).get("search") || ""
+    isClient
+      ? new URLSearchParams(window.location.search).get("search") || ""
+      : ""
   );
 
   return (
