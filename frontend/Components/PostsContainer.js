@@ -70,4 +70,4 @@ function PostsContainer() {
   );
 }
 
-export default PostsContainer;
+export default PostsContainer;;

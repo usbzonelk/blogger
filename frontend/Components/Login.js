@@ -1,6 +1,11 @@
+import Head from "next/head";
+
 const Login = () => {
   return (
     <>
+      <Head>
+        <title>Log in to continue</title>
+      </Head>
       <section class="section">
         <div class="container">
           <div class="columns is-centered">
