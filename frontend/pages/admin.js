@@ -1,11 +1,10 @@
-import Login from "../components/Login";
+import RequireAuth from "../redux/auth/RequireAuth";
+import SearchBar from "../components/SearchBar";
 
 const AdminPage = () => {
-  return (
-    <div style={{ marginTop: "2rem" }}>
-      <Login />
-    </div>
-  );
+  const ProtectedRoute = RequireAuth(SearchBar);
+  
+  return ProtectedRoute;
 };
 
 export default AdminPage;
