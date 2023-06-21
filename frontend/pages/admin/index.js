@@ -34,6 +34,18 @@ const AdminPage = () => {
                 <button class="button is-info is-fullwidth">Posts</button>
               </a>
             </div>
+            <div class="column">
+              <a href="/admin/labels">
+                {" "}
+                <button class="button is-info is-fullwidth">Labels</button>
+              </a>
+            </div>
+            <div class="column">
+              <a href="/admin/pages">
+                {" "}
+                <button class="button is-info is-fullwidth">Pages</button>
+              </a>
+            </div>
           </div>
         </div>
       </div>

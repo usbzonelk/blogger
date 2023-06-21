@@ -1,6 +1,19 @@
-import Head from "next/head";
-import DataTable from "react-data-table-component";
+import dynamic from "next/dynamic";
 
+import Head from "next/head";
+const DataTable = dynamic(
+  () => import("react-data-table-component").then((module) => module.default),
+  {
+    loading: () => <p>Loading posts...</p>,
+    ssr: false,
+  }
+);
+import { useSearchPostsMutation } from "../../redux/features/posts/postApiSlice";
+import { useGetAllPostsMutation } from "../../redux/features/posts/postApiSlice";
+import { useState } from "react";
+
+//todo:
+// table search function ; table filtering ;
 const columns = [
   {
     name: "Title",
@@ -16,7 +29,10 @@ const columns = [
   },
   {
     name: "Labels",
-    selector: (row) => row.labels,
+    selector: "labels",
+    cell: (row) => (
+      <span style={{ whiteSpace: "pre" }}>{row.labels.join(" / ")}</span>
+    ),
   },
   {
     name: " ",
@@ -46,16 +62,29 @@ const data = [
   {
     author: "63e145b63782cedf741d8e2c",
     title: "00",
-    labels: null,
+    labels: ["null"],
     status: "published",
   },
 ];
 const Posts = () => {
+  const [searchPosts, { data: searchData, isLoadingSearch, isErrorSearch }] =
+    useSearchPostsMutation();
+
+  const [getAllPosts, { data: postsLoad, isLoadingPosts, isErrorPosts }] =
+    useGetAllPostsMutation();
+
+  const [posts, setPosts] = useState(postsLoad ? postsLoad : data);
+
+  const handleSelection = ({ selectedRows }) => {
+    console.log("Selected Rows: ", selectedRows);
+  };
+
   return (
     <>
       <Head>
         <title>Manage your posts</title>
       </Head>
+
       <div
         style={{
           paddingTop: "6rem",
@@ -66,7 +95,14 @@ const Posts = () => {
         <div class="buttons is-centered">
           <button class="button is-primary is-medium">Create a new post</button>
         </div>
-        <DataTable columns={columns} data={data} selectableRows />
+
+        <DataTable
+          columns={columns}
+          data={posts}
+          selectableRows
+          pagination
+          onSelectedRowsChange={handleSelection}
+        />
       </div>
     </>
   );
