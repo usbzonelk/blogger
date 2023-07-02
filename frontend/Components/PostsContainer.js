@@ -48,6 +48,7 @@ function PostsContainer() {
     } else {
       loadPosts();
     }
+    console.log("isErrorPosts", isErrorPosts);
   }, [getAllPosts, searchPosts, setSearch]);
 
   if (isLoading) return <FullScreenLoading />;
@@ -70,4 +71,4 @@ function PostsContainer() {
   );
 }
 
-export default PostsContainer;;
+export default PostsContainer;

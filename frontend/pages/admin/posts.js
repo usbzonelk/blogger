@@ -1,53 +1,14 @@
 import dynamic from "next/dynamic";
-
+import React, { useState, useEffect } from "react";
+import DataTable from "react-data-table-component";
 import Head from "next/head";
-const DataTable = dynamic(
-  () => import("react-data-table-component").then((module) => module.default),
-  {
-    loading: () => <p>Loading posts...</p>,
-    ssr: false,
-  }
-);
+
+import LostApiConnection from "../../components/LostApiConnection";
 import { useSearchPostsMutation } from "../../redux/features/posts/postApiSlice";
 import { useGetAllPostsMutation } from "../../redux/features/posts/postApiSlice";
-import { useState } from "react";
 
 //todo:
 // table search function ; table filtering ;
-const columns = [
-  {
-    name: "Title",
-    selector: (row) => row.title,
-  },
-  {
-    name: "Author",
-    selector: (row) => row.author,
-  },
-  {
-    name: "Status",
-    selector: (row) => row.status,
-  },
-  {
-    name: "Labels",
-    selector: "labels",
-    cell: (row) => (
-      <span style={{ whiteSpace: "pre" }}>{row.labels.join(" / ")}</span>
-    ),
-  },
-  {
-    name: " ",
-    selector: (row) => row.editBtn,
-
-    cell: () => (
-      <button class="button is-primary is-small" onClick={null}>
-        Action
-      </button>
-    ),
-    ignoreRowClick: true,
-    allowOverflow: true,
-    button: true,
-  },
-];
 
 const data = [
   {
@@ -66,18 +27,58 @@ const data = [
     status: "published",
   },
 ];
-const Posts = () => {
-  const [searchPosts, { data: searchData, isLoadingSearch, isErrorSearch }] =
-    useSearchPostsMutation();
 
-  const [getAllPosts, { data: postsLoad, isLoadingPosts, isErrorPosts }] =
-    useGetAllPostsMutation();
+const columns = [
+  {
+    name: "Author",
+    selector: "author",
+    sortable: true,
+  },
+  {
+    name: "Title",
+    selector: "title",
+    sortable: true,
+  },
+  {
+    name: "Status",
+    selector: "status",
+    sortable: true,
+  },
+];
+
+const Posts = () => {
+  const [showPostControlButtons, setShowPostControlButtons] = useState(false);
+
+  const [
+    searchPosts,
+    { data: searchData, isLoading: isLoadingSearch, isError: isErrorSearch },
+  ] = useSearchPostsMutation();
+
+  const [
+    getAllPosts,
+    { data: postsLoad, isLoading: isLoadingPosts, isError: isErrorPosts },
+  ] = useGetAllPostsMutation();
 
   const [posts, setPosts] = useState(postsLoad ? postsLoad : data);
 
   const handleSelection = ({ selectedRows }) => {
-    console.log("Selected Rows: ", selectedRows);
+    const selected = selectedRows;
+
+    if (selected.length <= 0) {
+      setShowPostControlButtons(false);
+    } else if (selected.length > 0) {
+      setShowPostControlButtons(true);
+    }
   };
+
+  useEffect(() => {
+    async function loadPosts() {
+      await getAllPosts();
+    }
+    loadPosts();
+  }, [getAllPosts]);
+
+  if (isErrorPosts || isErrorSearch) return <LostApiConnection />;
 
   return (
     <>
@@ -93,16 +94,30 @@ const Posts = () => {
         }}
       >
         <div class="buttons is-centered">
-          <button class="button is-primary is-medium">Create a new post</button>
+          <button disabled={false} class="button is-primary is-medium">
+            Create a new post
+          </button>
         </div>
-
-        <DataTable
-          columns={columns}
-          data={posts}
-          selectableRows
-          pagination
-          onSelectedRowsChange={handleSelection}
-        />
+        <div class="buttons is-centered">
+          <button disabled={!showPostControlButtons} class="button is-danger">
+            Delete
+          </button>
+        </div>
+        {(isLoadingPosts || postsLoad) && (
+          <div>
+            {" "}
+            <DataTable
+              title="All the posts"
+              columns={columns}
+              data={postsLoad}
+              pagination
+              highlightOnHover
+              selectableRows
+              onSelectedRowsChange={handleSelection}
+              progressPending={isLoadingPosts || isLoadingSearch}
+            />
+          </div>
+        )}
       </div>
     </>
   );

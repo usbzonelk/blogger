@@ -38,6 +38,7 @@ const LoadPost = (props) => {
     getRelatedPosts(slug);
   }, [getFullPost, getAuthsPost, getLabelsOfPost, getRelatedPosts, slug]);
 
+
   if (isLoadingPost || isLoadingAuth) {
     window.document.title = "Loading";
     return <FullScreenLoading />;
