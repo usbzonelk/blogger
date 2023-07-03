@@ -1,18 +1,28 @@
 import Head from "next/head";
+import { useState } from "react";
 
 import { useSendLoginDataMutation } from "../redux/features/users/login";
 
 const Login = () => {
   const [sendLoginData, { data, isLoading, isError }] =
     useSendLoginDataMutation();
+  const [isVisible, setIsVisible] = useState(true);
+  const [isErr, setIsErr] = useState(false);
+
+  const handleClose = () => {
+    setIsVisible(true);
+  };
 
   const handleLoginBtn = async (ev) => {
     ev.preventDefault();
-    console.log(ev.target.password.value);
-    await sendLoginData({
+    const res = await sendLoginData({
       email: ev.target.email.value,
       password: ev.target.password.value,
     });
+    if (res.error) {
+      setIsErr(true);
+      setIsVisible(false);
+    }
   };
 
   return (
@@ -54,7 +64,12 @@ const Login = () => {
                 </div>
                 <div class="field">
                   <div class="control">
-                    <button type="submit" class="button is-primary">
+                    <button
+                      type="submit"
+                      className={`button is-primary ${
+                        isLoading ? "is-loading" : ""
+                      }`}
+                    >
                       Login
                     </button>
                   </div>
@@ -63,6 +78,22 @@ const Login = () => {
             </div>
           </div>
         </div>
+        {(isErr || isError) && (
+          <div
+            style={{
+              position: "fixed",
+              bottom: "0",
+              left: "50%",
+              transform: "translateX(-50%)",
+              zIndex: "9999",
+            }}
+            className={`notification is-danger`}
+            hidden={isVisible}
+          >
+            <button className="delete" onClick={handleClose}></button>
+            Invalid login credentials!
+          </div>
+        )}
       </section>
     </>
   );
