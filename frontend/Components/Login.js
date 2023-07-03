@@ -1,6 +1,20 @@
 import Head from "next/head";
 
+import { useSendLoginDataMutation } from "../redux/features/users/login";
+
 const Login = () => {
+  const [sendLoginData, { data, isLoading, isError }] =
+    useSendLoginDataMutation();
+
+  const handleLoginBtn = async (ev) => {
+    ev.preventDefault();
+    console.log(ev.target.password.value);
+    await sendLoginData({
+      email: ev.target.email.value,
+      password: ev.target.password.value,
+    });
+  };
+
   return (
     <>
       <Head>
@@ -11,13 +25,18 @@ const Login = () => {
           <div class="columns is-centered">
             <div class="column is-half">
               <h1 class="title has-text-centered">Login to admin panel</h1>
-              <form>
+              <form
+                onSubmit={(ev) => {
+                  handleLoginBtn(ev);
+                }}
+              >
                 <div class="field">
                   <label class="label">Email</label>
                   <div class="control">
                     <input
                       class="input"
                       type="email"
+                      name="email"
                       placeholder="Enter your email"
                     />
                   </div>
@@ -27,6 +46,7 @@ const Login = () => {
                   <div class="control">
                     <input
                       class="input"
+                      name="password"
                       type="password"
                       placeholder="Enter your password"
                     />
@@ -34,7 +54,9 @@ const Login = () => {
                 </div>
                 <div class="field">
                   <div class="control">
-                    <button class="button is-primary">Login</button>
+                    <button type="submit" class="button is-primary">
+                      Login
+                    </button>
                   </div>
                 </div>
               </form>

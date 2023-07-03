@@ -356,6 +356,7 @@ async function updateItmInArray(collection, query, itemToDelete, newItm) {
 async function pswValidate(plainPass, email) {
   await dbConnection.chnageCollection("authors");
   const yy = await dbConnection.readData({ email: email }, "password");
+if(yy.length < 1){return null}
   return await pswManagement.validatePass(plainPass, yy[0]["password"]);
 }
 async function pswStore(plainPass, email) {
