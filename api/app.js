@@ -270,6 +270,7 @@ app.use("/auth", (req, res, next) => {
 });
 
 app.use("/signin", async (req, res, next) => {
+console.log(req.body)
   if (!(req.body.password && req.body.mail)) {
     return res.status(403).send("enter both psw+mail");
   }
@@ -356,6 +357,7 @@ async function updateItmInArray(collection, query, itemToDelete, newItm) {
 async function pswValidate(plainPass, email) {
   await dbConnection.chnageCollection("authors");
   const yy = await dbConnection.readData({ email: email }, "password");
+console.log(yy)
 if(yy.length < 1){return null}
   return await pswManagement.validatePass(plainPass, yy[0]["password"]);
 }
