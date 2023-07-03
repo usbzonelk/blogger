@@ -1,21 +1,29 @@
 import React, { useState } from "react";
-import Head from "next/head";
 
-const EditPost = () => {
-  const [slug, setSlug] = useState("");
-  const [content, setContent] = useState("");
-  const [labels, setLabels] = useState("");
-  const [title, setTitle] = useState("");
+const EditPost = (props) => {
+  const [slug, setSlug] = useState(props ? props.slug : "");
+  const [content, setContent] = useState(props ? props.content : "");
+  const [labels, setLabels] = useState(props ? props.labels : []);
+  const [title, setTitle] = useState(props ? props.title : "");
   const [isPublished, setIsPublished] = useState(false);
+  const [isNewPost, setIsNewPost] = useState(
+    props ? (props.new ? true : false) : false
+  );
+
+  const postData = {
+    slug: slug,
+    title: title,
+    content: content,
+    status: "published",
+    labels: labels,
+  };
 
   const handlePublish = () => {
     setIsPublished(true);
-    // Publish post logic here
   };
 
   const handleSaveDraft = () => {
     setIsPublished(false);
-    // Save draft logic here
   };
 
   return (
