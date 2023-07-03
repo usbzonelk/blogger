@@ -7,11 +7,11 @@ import LostApiConnection from "../../../components/LostApiConnection";
 import { useSearchPostsMutation } from "../../../redux/features/posts/postApiSlice";
 import { useGetAllPostsMutation } from "../../../redux/features/posts/postApiSlice";
 
-//todo:
-// table search function ; table filtering ;
 
 const Posts = () => {
   const router = useRouter();
+
+  const [newPostCompose, setNewPostCompose] = useState(false);
 
   const [showPostControlButtons, setShowPostControlButtons] = useState(false);
 
@@ -84,6 +84,9 @@ const Posts = () => {
     router.push(`/admin/posts/${row.slug}`);
   };
 
+  const handleNewPostButton = () => {
+    setNewPostCompose(!newPostCompose);
+  };
   useEffect(() => {
     async function loadPosts() {
       await getAllPosts();
@@ -93,47 +96,57 @@ const Posts = () => {
 
   if (isErrorPosts || isErrorSearch) return <LostApiConnection />;
 
-  return (
-    <>
-      <Head>
-        <title>Manage your posts</title>
-      </Head>
+  if (!newPostCompose) {
+    return (
+      <>
+        <Head>
+          <title>Manage your posts</title>
+        </Head>
 
-      <div
-        style={{
-          paddingTop: "6rem",
-          paddingLeft: "1rem",
-          paddingRight: "1rem",
-        }}
-      >
-        <div class="buttons is-centered">
-          <button disabled={false} class="button is-primary is-medium">
-            Create a new post
-          </button>
-        </div>
-        <div class="buttons is-centered">
-          <button disabled={!showPostControlButtons} class="button is-danger">
-            Delete
-          </button>
-        </div>
-        {(isLoadingPosts || postsLoad) && (
-          <div>
-            {" "}
-            <DataTable
-              title="All the posts"
-              columns={columns}
-              data={postsLoad}
-              pagination
-              highlightOnHover
-              selectableRows
-              onSelectedRowsChange={handleSelection}
-              progressPending={isLoadingPosts || isLoadingSearch}
-            />
+        <div
+          style={{
+            paddingTop: "6rem",
+            paddingLeft: "1rem",
+            paddingRight: "1rem",
+          }}
+        >
+          <div class="buttons is-centered">
+            <button
+              disabled={false}
+              class="button is-primary is-medium"
+              onClick={handleNewPostButton}
+            >
+              {newPostCompose ? "Save Post" : "Create a new post"}
+            </button>
           </div>
-        )}
-      </div>
-    </>
-  );
+          <div class="buttons is-centered">
+            <button disabled={!showPostControlButtons} class="button is-danger">
+              Delete
+            </button>
+          </div>
+          {(isLoadingPosts || postsLoad) && (
+            <div>
+              {" "}
+              <DataTable
+                title="All the posts"
+                columns={columns}
+                data={postsLoad}
+                pagination
+                highlightOnHover
+                selectableRows
+                onSelectedRowsChange={handleSelection}
+                progressPending={isLoadingPosts || isLoadingSearch}
+              />
+            </div>
+          )}
+        </div>
+      </>
+    );
+  }
+
+  if (newPostCompose) {
+    
+  }
 };
 
 export default Posts;
