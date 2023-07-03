@@ -1,52 +1,18 @@
-import dynamic from "next/dynamic";
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
-import LostApiConnection from "../../components/LostApiConnection";
-import { useSearchPostsMutation } from "../../redux/features/posts/postApiSlice";
-import { useGetAllPostsMutation } from "../../redux/features/posts/postApiSlice";
+import LostApiConnection from "../../../components/LostApiConnection";
+import { useSearchPostsMutation } from "../../../redux/features/posts/postApiSlice";
+import { useGetAllPostsMutation } from "../../../redux/features/posts/postApiSlice";
 
 //todo:
 // table search function ; table filtering ;
 
-const data = [
-  {
-    author: "a-small-river-by-their-place",
-    title: "A Small River by Their Place",
-    labels: [
-      "https://a0.muscache.com/",
-      "im/pictures/e83e702f-ef49-40fb-8fa0-6512d7e26e9b.jpg?aki_policy=large",
-    ],
-    status: "published",
-  },
-  {
-    author: "63e145b63782cedf741d8e2c",
-    title: "00",
-    labels: ["null"],
-    status: "published",
-  },
-];
-
-const columns = [
-  {
-    name: "Author",
-    selector: "author",
-    sortable: true,
-  },
-  {
-    name: "Title",
-    selector: "title",
-    sortable: true,
-  },
-  {
-    name: "Status",
-    selector: "status",
-    sortable: true,
-  },
-];
-
 const Posts = () => {
+  const router = useRouter();
+
   const [showPostControlButtons, setShowPostControlButtons] = useState(false);
 
   const [
@@ -59,8 +25,6 @@ const Posts = () => {
     { data: postsLoad, isLoading: isLoadingPosts, isError: isErrorPosts },
   ] = useGetAllPostsMutation();
 
-  const [posts, setPosts] = useState(postsLoad ? postsLoad : data);
-
   const handleSelection = ({ selectedRows }) => {
     const selected = selectedRows;
 
@@ -69,6 +33,55 @@ const Posts = () => {
     } else if (selected.length > 0) {
       setShowPostControlButtons(true);
     }
+  };
+
+  const data = [
+    {
+      author: "a-small-river-by-their-place",
+      title: "A Small River by Their Place",
+      labels: [
+        "https://a0.muscache.com/",
+        "im/pictures/e83e702f-ef49-40fb-8fa0-6512d7e26e9b.jpg?aki_policy=large",
+      ],
+      status: "published",
+    },
+    {
+      author: "63e145b63782cedf741d8e2c",
+      title: "00",
+      labels: ["null"],
+      status: "published",
+    },
+  ];
+
+  const columns = [
+    {
+      name: "Post Title",
+      selector: "title",
+      sortable: true,
+    },
+    {
+      name: "Status",
+      selector: "status",
+      sortable: true,
+    },
+    {
+      name: " ",
+      cell: (row) => (
+        <button
+          disabled={false}
+          className="button is-info is-small"
+          onClick={() => handleEditButton(row)}
+        >
+          Edit
+        </button>
+      ),
+      button: true,
+    },
+  ];
+
+  const handleEditButton = (row) => {
+    console.log("Button clicked for row:", row);
+    router.push(`/admin/posts/${row.slug}`);
   };
 
   useEffect(() => {
