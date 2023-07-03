@@ -3,10 +3,10 @@ import DataTable from "react-data-table-component";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
+import EditPost from "../../../components/admin/EditPost";
 import LostApiConnection from "../../../components/LostApiConnection";
 import { useSearchPostsMutation } from "../../../redux/features/posts/postApiSlice";
 import { useGetAllPostsMutation } from "../../../redux/features/posts/postApiSlice";
-
 
 const Posts = () => {
   const router = useRouter();
@@ -145,7 +145,14 @@ const Posts = () => {
   }
 
   if (newPostCompose) {
-    
+    return (
+      <>
+        <Head>
+          <title>Create a new post</title>
+        </Head>
+        <EditPost />
+      </>
+    );
   }
 };
 
