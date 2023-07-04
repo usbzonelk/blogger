@@ -15,6 +15,8 @@ export const login = apiSlice.injectEndpoints({
       transformResponse: (response) => {
         return response;
       },
+      validateStatus: (response, result) =>
+        response.status === 200 && !result.isError,
     }),
   }),
 });

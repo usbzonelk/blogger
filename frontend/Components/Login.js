@@ -1,14 +1,22 @@
 import Head from "next/head";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 import Cookies from "js-cookie";
 
+import validateToken from "../redux/auth/tokenValidate";
 import { useSendLoginDataMutation } from "../redux/features/users/login";
 
-import { useGetAllPostsMutation } from "../redux/features/posts/adminPosts";
 
 const Login = () => {
-  const [getAllPosts, { data, isError: kk }] = useGetAllPostsMutation();
+  const router = useRouter();
+
+  const currentToken = Cookies.get("token");
+
+  if (currentToken) {
+    const validity = validateToken(currentToken);
+    validity ? router.push("/admin") : "";
+  }
 
   const [sendLoginData, { data: token, isLoading, isError, status }] =
     useSendLoginDataMutation();
@@ -20,14 +28,15 @@ const Login = () => {
   };
 
   const handleLoginBtn = async (ev) => {
-    getAllPosts();
-
     ev.preventDefault();
+    setIsVisible(true);
+
     const loginData = {
       email: ev.target.email.value,
       password: ev.target.password.value,
     };
     const res = await sendLoginData(loginData);
+    console.log(res, status);
     if (status == "rejected") {
       setIsErr(true);
       setIsVisible(false);
@@ -42,6 +51,7 @@ const Login = () => {
     if (token) {
       Cookies.set("token", token.token, { expires: 7, path: "/" });
       Cookies.set("user", ev.target.email.value, { expires: 7, path: "/" });
+      router.push("/admin");
     }
   };
 
