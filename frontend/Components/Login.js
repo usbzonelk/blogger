@@ -5,7 +5,11 @@ import Cookies from "js-cookie";
 
 import { useSendLoginDataMutation } from "../redux/features/users/login";
 
+import { useGetAllPostsMutation } from "../redux/features/posts/adminPosts";
+
 const Login = () => {
+  const [getAllPosts, { data, isError: kk }] = useGetAllPostsMutation();
+
   const [sendLoginData, { data: token, isLoading, isError, status }] =
     useSendLoginDataMutation();
   const [isVisible, setIsVisible] = useState(true);
@@ -16,6 +20,8 @@ const Login = () => {
   };
 
   const handleLoginBtn = async (ev) => {
+    getAllPosts();
+
     ev.preventDefault();
     const loginData = {
       email: ev.target.email.value,
@@ -33,7 +39,6 @@ const Login = () => {
         setIsVisible(false);
       }
     }
-    console.log(isError, token, res, status);
     if (token) {
       Cookies.set("token", token.token, { expires: 7, path: "/" });
       Cookies.set("user", ev.target.email.value, { expires: 7, path: "/" });

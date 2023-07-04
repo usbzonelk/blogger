@@ -251,7 +251,10 @@ const contextUser = {
 
 app.use(bodyParser.json());
 
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true,
+}));
 
 app.use("/auth", (req, res, next) => {
   const authHeader = req.headers["authorization"];
@@ -287,8 +290,9 @@ console.log(req.body)
 });
 
 app.use(
-  "/1",
+  "/1", 
   async (req, res, next) => {
+  
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(" ")[1];
 
