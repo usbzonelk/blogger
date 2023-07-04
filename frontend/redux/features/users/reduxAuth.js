@@ -4,7 +4,6 @@ import Cookies from "js-cookie";
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    user_type: Cookies.get("type") || null,
     user: Cookies.get("user") || null,
     access: Cookies.get("token") || null,
   },

@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 import { useSendLoginDataMutation } from "../redux/features/users/login";
 
 const Login = () => {
-  const [sendLoginData, { data, isLoading, isError }] =
+  const [sendLoginData, { data: token, isLoading, isError, status }] =
     useSendLoginDataMutation();
   const [isVisible, setIsVisible] = useState(true);
   const [isErr, setIsErr] = useState(false);
@@ -17,15 +17,27 @@ const Login = () => {
 
   const handleLoginBtn = async (ev) => {
     ev.preventDefault();
-    const res = await sendLoginData({
+    const loginData = {
       email: ev.target.email.value,
       password: ev.target.password.value,
-    });
-    if (res.error) {
+    };
+    const res = await sendLoginData(loginData);
+    if (status == "rejected") {
       setIsErr(true);
       setIsVisible(false);
     }
-    console.log(data);
+    if (status == "uninitialized") {
+      await sendLoginData(loginData);
+      if (status == "rejected") {
+        setIsErr(true);
+        setIsVisible(false);
+      }
+    }
+    console.log(isError, token, res, status);
+    if (token) {
+      Cookies.set("token", token.token, { expires: 7, path: "/" });
+      Cookies.set("user", ev.target.email.value, { expires: 7, path: "/" });
+    }
   };
 
   return (
@@ -81,22 +93,21 @@ const Login = () => {
             </div>
           </div>
         </div>
-        {(isErr || isError) && (
-          <div
-            style={{
-              position: "fixed",
-              bottom: "0",
-              left: "50%",
-              transform: "translateX(-50%)",
-              zIndex: "9999",
-            }}
-            className={`notification is-danger`}
-            hidden={isVisible}
-          >
-            <button className="delete" onClick={handleClose}></button>
-            Invalid login credentials!
-          </div>
-        )}
+
+        <div
+          style={{
+            position: "fixed",
+            bottom: "0",
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: "9999",
+          }}
+          className={`notification is-danger`}
+          hidden={isVisible}
+        >
+          <button className="delete" onClick={handleClose}></button>
+          Invalid login credentials!
+        </div>
       </section>
     </>
   );

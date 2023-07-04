@@ -11,6 +11,10 @@ export const login = apiSlice.injectEndpoints({
           mail: logins.email,
         },
       }),
+
+      transformResponse: (response) => {
+        return response;
+      },
     }),
   }),
 });
