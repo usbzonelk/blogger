@@ -4,6 +4,7 @@ import { useGetAllSlugsMutation } from "../../../redux/features/slugs/publicSlug
 
 import FullScreenLoading from "../../../components/FullScreenLoading";
 import EditPost from "../../../components/admin/EditPost";
+import NotFound from "../../../components/NotFound";
 
 const EditPostPage = () => {
   const router = useRouter();
@@ -11,23 +12,11 @@ const EditPostPage = () => {
   const [getAllSlugs, { data: slugs, isLoading: isLoadingSlugs, isError }] =
     useGetAllSlugsMutation();
 
-  
-
-  const loadFullPost = async (slug) => {
-    await getFullPost(slug);
-  };
-
-  const sendFullPostRequest = (slug, loadFullPost) => {
-    useEffect(() => {
-      loadFullPost(slug);
-    }, [slug, loadFullPost]);
-  };
-
   useEffect(() => {
     getAllSlugs();
   }, []);
 
-  if (isLoadingSlugs || isLoadingPost) {
+  if (isLoadingSlugs) {
     window.document.title = "Loading";
 
     return <FullScreenLoading />;
@@ -36,13 +25,10 @@ const EditPostPage = () => {
   if (slugs) {
     const matchingSlug = slugs.find((slug0) => slug0.slug === slug);
     if (matchingSlug) {
-      sendFullPostRequest(slug, loadFullPost);
+      <EditPost slug={slug} />;
     } else {
       return <NotFound />;
     }
-  }
-  if (post && !isLoadingPost) {
-    return <EditPost slug={slug} />;
   }
 };
 export default EditPostPage;
