@@ -1,15 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
+import { useGetFullPostMutation } from "../../redux/features/posts/postApiSlice";
 
 const EditPost = (props) => {
   const [slug, setSlug] = useState(props ? props.slug : "");
-  const [content, setContent] = useState(props ? props.content : "");
+  /* const [content, setContent] = useState(props ? props.content : "");
   const [labels, setLabels] = useState(props ? props.labels : []);
-  const [title, setTitle] = useState(props ? props.title : "");
+  const [title, setTitle] = useState(props ? props.title : ""); */
   const [isPublished, setIsPublished] = useState(false);
   const [isNewPost, setIsNewPost] = useState(
     props ? (props.new ? true : false) : false
   );
+  const [
+    getFullPost,
+    { data: post, isLoading: isLoadingPost, isError: loadingPostError },
+  ] = useGetFullPostMutation();
 
+  useEffect(() => {
+    getFullPost(slug);
+  });
+  
   const postData = {
     slug: slug,
     title: title,

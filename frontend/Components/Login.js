@@ -7,7 +7,6 @@ import Cookies from "js-cookie";
 import validateToken from "../redux/auth/tokenValidate";
 import { useSendLoginDataMutation } from "../redux/features/users/login";
 
-
 const Login = () => {
   const router = useRouter();
 
@@ -41,13 +40,7 @@ const Login = () => {
       setIsErr(true);
       setIsVisible(false);
     }
-    if (status == "uninitialized") {
-      await sendLoginData(loginData);
-      if (status == "rejected") {
-        setIsErr(true);
-        setIsVisible(false);
-      }
-    }
+
     if (token) {
       Cookies.set("token", token.token, { expires: 7, path: "/" });
       Cookies.set("user", ev.target.email.value, { expires: 7, path: "/" });
