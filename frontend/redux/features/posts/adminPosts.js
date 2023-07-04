@@ -22,7 +22,7 @@ export const adminApiSlice = adminApi.injectEndpoints({
         },
       }),
       transformResponse: (response) => {
-        return response.data.getSemiPostsWithState;
+        return response.data;
       },
     }),
   }),
